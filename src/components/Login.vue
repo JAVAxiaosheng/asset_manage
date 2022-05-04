@@ -1,6 +1,8 @@
 <template>
   <div class="login_container">
     <div class="login_box">
+
+
       <!-- 头像区域 -->
       <div class="avatar_box">
         <img src="../assets/logo.png" alt="">
