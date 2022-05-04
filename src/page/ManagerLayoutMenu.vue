@@ -63,7 +63,7 @@
           <span>用户管理</span>
         </template>
         <el-menu-item index="user-info">用户信息</el-menu-item>
-        <el-menu-item index="4-2">修改密码</el-menu-item>
+        <el-menu-item index="change-password">修改密码</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

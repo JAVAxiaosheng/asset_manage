@@ -4,7 +4,9 @@ import Home from "@/components/Home";
 import LayoutContainer from '../page/LayoutContainer'
 import TeacherInfo from "@/components/TeacherInfo";
 import Login from "@/components/Login";
+
 import UserInfo from "@/components/manager/UserInfo";
+import ChangePassword from '@/components/manager/ChangePassword';
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -27,6 +29,11 @@ const router = createRouter({
                 name: "UserInfo",
                 component: UserInfo
             }, {
+                    path: '/change-password',
+                    name: "ChangePassword",
+                    component: ChangePassword
+                },
+                {
                 path: '/teacher-info',
                 name: "TeacherInfo",
                 component: TeacherInfo
