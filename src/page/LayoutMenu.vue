@@ -54,6 +54,15 @@
         <el-menu-item index="2-1">维修上报</el-menu-item>
         <el-menu-item index="2-2">维修记录</el-menu-item>
       </el-sub-menu>
+
+      <el-menu-item index="4">
+        <template #title>
+          <el-icon>
+            <unlock/>
+          </el-icon>
+          <span>修改密码</span>
+        </template>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
