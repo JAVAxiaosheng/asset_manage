@@ -5,7 +5,7 @@
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
 
         <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="9">
             <el-form-item label="部门编号" style="margin-top: 15px;">
               <el-select v-model="searchForm.departmentId" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
@@ -18,7 +18,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="9">
             <el-form-item label="部门名称" style="margin-top: 15px;">
               <el-select v-model="searchForm.departmentName" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
@@ -31,7 +31,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="3">
             <el-form-item style="margin-top: 15px;float: right">
               <el-button type="primary" plain round @click="search">
                 <el-icon style="vertical-align: middle">
@@ -41,7 +41,7 @@
               </el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="3">
             <el-form-item style="margin-top: 15px;float: right">
               <el-button type="success" round @click="addDepartmentOpenDialog">
                 <el-icon style="vertical-align: middle">
