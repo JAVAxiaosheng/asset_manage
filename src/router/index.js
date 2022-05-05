@@ -2,7 +2,6 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 import Home from "@/components/Home";
 import LayoutContainer from '../page/LayoutContainer'
-import TeacherInfo from "@/components/TeacherInfo";
 import Login from "@/components/Login";
 
 import UserInfo from "@/components/manager/UserInfo";
@@ -48,11 +47,7 @@ const router = createRouter({
                     name: "employeeChangePassword",
                     component: employeeChangePassword
                 },
-                {
-                path: '/teacher-info',
-                name: "TeacherInfo",
-                component: TeacherInfo
-            }],
+            ],
         }
     ]
 })
