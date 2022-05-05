@@ -56,7 +56,6 @@ export default {
       });
     },
     checkoutLogin() {
-      console.log(Number(this.roleId) === -1);
       if (this.username === '') {
         this.dialogVisible = true;
       }
