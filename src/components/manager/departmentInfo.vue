@@ -270,8 +270,8 @@ export default {
     //获取部门表的信息
     listDepartmentInfo() {
       let params = {
-        page_num: 1,
-        page_size: 100
+        page_num: this.currentPage,
+        page_size: this.pageSize
       };
       if (this.searchForm.departmentName !== '') {
         params['department_name'] = this.searchForm.departmentName;
