@@ -2,19 +2,18 @@
   <div class="login_container">
     <div class="login_box">
       <!-- 头像区域 -->
-      <!-- 卢展 -->
       <div class="avatar_box">
         <img src="../assets/头像.jpeg" alt="">
       </div>
       <!-- 登录表单区域 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules"  class="login_form">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-         <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
+          <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
@@ -69,7 +68,7 @@ export default {
           if (apiData.code === 0) {
             Cookies.set('user_name', apiData.data.userName);
             Cookies.set('role', apiData.data.role);
-            Cookies.set('id',apiData.data.id);
+            Cookies.set('id', apiData.data.id);
             this.$router.push({
               path: '/home'
             });
@@ -94,7 +93,7 @@ export default {
 .login_container {
   height: 100%;
   width: 100%;
-  background: url("../assets/背景图.jpeg") no-repeat center;
+  background: url("../assets/background.jpg") no-repeat center;
   background-size: 100% 100%;
 }
 
@@ -121,6 +120,7 @@ export default {
     bottom: 195px;
     transform: translate(-50%, -50%);
     background-color: #fff;
+
     img {
       width: 100%;
       height: 100%;
@@ -129,9 +129,11 @@ export default {
     }
   }
 }
-/deep/.el-input__inner{
+
+/deep/ .el-input__inner {
   background-color: transparent;
 }
+
 .login_form {
   width: 100%;
   position: absolute;

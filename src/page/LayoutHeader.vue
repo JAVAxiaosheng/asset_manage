@@ -3,9 +3,9 @@
     <el-dropdown class="down">
     <span class="el-dropdown-link">
        用户名：{{ username }}
-<!--      <el-icon class="el-icon&#45;&#45;right">-->
-<!--        <arrow-down />-->
-<!--      </el-icon>-->
+      <el-icon class="el-icon--right">
+        <arrow-down/>
+      </el-icon>
     </span>
       <template #dropdown>
         <el-dropdown-menu>
@@ -14,7 +14,7 @@
       </template>
     </el-dropdown>
     <span>
-      <img style="margin-top: 8px;position: fixed;right: 150px" width="40" src="../assets/bilibili_blue.svg"
+      <img style="margin-top: 8px;position: fixed;right: 180px" width="40" src="../assets/bilibili_blue.svg"
            alt="">
     </span>
   </div>
@@ -34,7 +34,7 @@ export default {
     this.username = Cookies.get('user_name');
   },
   methods: {
-    logout(){
+    logout() {
       Cookies.remove('id');
       Cookies.remove('user_name');
       Cookies.remove('role');
@@ -53,13 +53,16 @@ export default {
   display: flex;
   align-items: center;
 }
-/deep/.el-dropdown-link{
+
+/deep/ .el-dropdown-link {
   color: #fff;
 
   font-size: 16px;
 }
-/deep/ .down{
+
+/deep/ .down {
   margin-top: 20px;
+  margin-right: 20px;
   float: right;
 }
 </style>
