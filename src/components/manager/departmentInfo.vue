@@ -33,7 +33,7 @@
           </el-col>
           <el-col :span="3">
             <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="search">
+              <el-button type="primary" plain round @click="search">
                 <el-icon style="vertical-align: middle">
                   <search/>
                 </el-icon>
@@ -43,9 +43,9 @@
           </el-col>
           <el-col :span="3">
             <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="addDialogFormVisible=true">
+              <el-button type="success" round @click="addDepartmentOpenDialog">
                 <el-icon style="vertical-align: middle">
-                  <search/>
+                  <plus/>
                 </el-icon>
                 <span style="vertical-align: middle">添加部门</span>
               </el-button>
@@ -73,11 +73,10 @@
 
         <el-table-column label="操作">
           <template v-slot="props">
-            <el-button type="primary" plain style="font-size: 10px" @click="openModifyRoleDialog(props.row)">
+            <el-button type="primary" plain circle @click="openModifyRoleDialog(props.row)">
               <el-icon style="vertical-align: middle">
                 <edit/>
               </el-icon>
-              <span style="vertical-align: middle">修改</span>
             </el-button>
 
             <el-popconfirm
@@ -86,7 +85,7 @@
                 @confirm="deleteDepartment(props.row)"
                 title="确定要删除此部门么?">
               <template #reference>
-                <el-button type="danger" plain>
+                <el-button type="danger" plain circle>
                   <el-icon style="vertical-align: middle">
                     <delete/>
                   </el-icon>
@@ -117,18 +116,18 @@
     <!--    添加部门-->
     <div>
       <el-dialog v-model="addDialogFormVisible" title="部门添加">
-        <el-form :model="addForm">
-          <el-form-item label="部门编号" style="margin-left: 20px">
-            <el-input v-model="addForm.departmentId" style="width: 220px"/>
+        <el-form :model="addForm" :rules="addDepartmentRules" ref="addDepartmentFromRef">
+          <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
+            <el-input v-model.number="addForm.departmentId" style="width: 220px" @change="addDepartmentIdChange"/>
           </el-form-item>
-          <el-form-item label="部门名称" style="margin-left: 20px">
-            <el-input v-model="addForm.departmentName" style="width: 220px"/>
+          <el-form-item label="部门名称" style="margin-left: 20px" prop="departmentName">
+            <el-input v-model="addForm.departmentName" style="width: 220px" @change="addDepartmentNameChange"/>
           </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="addDialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="addDepartment">确定</el-button>
+        <el-button type="danger" plain @click="cancel">取消</el-button>
+        <el-button type="primary" @click="addDepartment">添加</el-button>
       </span>
         </template>
       </el-dialog>
@@ -147,8 +146,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="modifyDepartment">确定</el-button>
+        <el-button type="danger" plain @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="modifyDepartment">修改</el-button>
       </span>
         </template>
       </el-dialog>
@@ -197,6 +196,15 @@ export default {
           {required: true, message: '部门名称不能为空', trigger: 'change'},
         ],
       },
+      addDepartmentRules: {
+        departmentId: [
+          {required: true, message: '部门编号不能为空', trigger: 'change'},
+          {required: true, type: 'number', message: '编号必须为数字', trigger: 'change'}
+        ],
+        departmentName: [
+          {required: true, message: '部门名称不能为空', trigger: 'change'},
+        ]
+      },
     };
   },
   mounted() {
@@ -204,12 +212,54 @@ export default {
     this.listDepartmentInfo();
   },
   methods: {
+    cancel() {
+      this.addDialogFormVisible = false;
+      this.$refs["addDepartmentFromRef"].resetFields();
+    },
+    addDepartmentOpenDialog() {
+      this.addDialogFormVisible = true;
+    },
+    addDepartmentIdChange() {
+      let params = {
+        department_id: this.addForm.departmentId
+      };
+      this.$http.post('api/department/check_department', params).then(resp => {
+        let apiData = resp.data;
+        if (apiData.data.checkout_code === -5003) {
+          ElMessageBox.alert('该部门编号已存在，请重新输入', '错误', {
+            confirmButtonText: '确定',
+            type: "error",
+            callback: () => {
+              this.$refs["addDepartmentFromRef"].resetFields(['departmentId']);
+            }
+          });
+        }
+      });
+
+    },
+    addDepartmentNameChange() {
+      let params = {
+        department_name: this.addForm.departmentName.trim()
+      };
+      this.$http.post('api/department/check_department', params).then(resp => {
+        let apiData = resp.data;
+        if (apiData.data.checkout_code === -5003) {
+          ElMessageBox.alert('该部门名称已存在，请重新输入', '错误', {
+            confirmButtonText: '确定',
+            type: "error",
+            callback: () => {
+              this.$refs["addDepartmentFromRef"].resetFields(['departmentName']);
+            }
+          });
+        }
+      });
+    },
     departmentNameChange() {
       if (this.form.departmentName === this.beforeModifyDepartmentName) {
         return;
       }
       let params = {
-        department_name: this.form.departmentName
+        department_name: this.form.departmentName.trim()
       };
       this.$http.post('api/department/check_department', params).then(resp => {
         let apiData = resp.data;
@@ -234,7 +284,6 @@ export default {
       this.$http.post('api/department/check_department', params).then(resp => {
         let apiData = resp.data;
         if (apiData.data.checkout_code === -5003) {
-          console.log("已存在");
           ElMessageBox.alert('该部门编号已存在，请重新输入', '错误', {
             confirmButtonText: '确定',
             type: "error",
@@ -274,13 +323,12 @@ export default {
         page_size: this.pageSize
       };
       if (this.searchForm.departmentName !== '') {
-        params['department_name'] = this.searchForm.departmentName;
+        params['department_name'] = this.searchForm.departmentName.trim();
       }
       if (this.searchForm.departmentId !== '') {
         params['department_id'] = this.searchForm.departmentId;
       }
       this.$http.get('api/department/query_department', {params}).then(resp => {
-        console.log(resp);
         let apiData = resp.data;
         this.tableData = apiData.data;
         this.total = apiData.total;
@@ -290,7 +338,27 @@ export default {
 
     // 添加部门
     addDepartment() {
-
+      this.$refs['addDepartmentFromRef'].validate((valid) => {
+        if (valid) {
+          let params = {
+            department_id: this.addForm.departmentId,
+            department_name: this.addForm.departmentName.trim(),
+          };
+          this.$http.post('api/department/save_department', params).then(resp => {
+            let apiData = resp.data;
+            if (apiData.code === 0) {
+              this.$message.success("添加成功");
+              this.addDialogFormVisible = false;
+              this.$refs["addDepartmentFromRef"].resetFields();
+              this.listDepartmentInfo();
+            } else {
+              this.$message.error("添加接口错误");
+            }
+          });
+        } else {
+          return false;
+        }
+      });
     },
     // 删除部门
     deleteDepartment(row) {
@@ -321,7 +389,7 @@ export default {
           let params = {
             id: this.form.id,
             department_id: this.form.departmentId,
-            department_name: this.form.departmentName,
+            department_name: this.form.departmentName.trim(),
           };
           this.$http.put('api/department/update_department', params).then(resp => {
             let apiData = resp.data;
