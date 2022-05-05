@@ -29,7 +29,7 @@
           </el-icon>
           <span>员工管理</span>
         </template>
-        <el-menu-item index="student-info">部门信息</el-menu-item>
+        <el-menu-item index="department_info">部门信息</el-menu-item>
         <el-menu-item index="student-info">员工信息</el-menu-item>
       </el-sub-menu>
 

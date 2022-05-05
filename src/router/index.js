@@ -8,7 +8,9 @@ import Login from "@/components/Login";
 import UserInfo from "@/components/manager/UserInfo";
 import ChangePassword from '@/components/manager/ChangePassword';
 
-import employeeChangePassword from '@/components/employee/ChangePassword'
+import employeeChangePassword from '@/components/employee/ChangePassword';
+
+import departmentInfo from '@/components/manager/departmentInfo'
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -30,7 +32,13 @@ const router = createRouter({
                 path: '/user-info',
                 name: "UserInfo",
                 component: UserInfo
-            }, {
+            },
+                {
+                    path: '/department_info',
+                    name: "departmentInfo",
+                    component: departmentInfo
+                },
+                {
                     path: '/change-password',
                     name: "ChangePassword",
                     component: ChangePassword
