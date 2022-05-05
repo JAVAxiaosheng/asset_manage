@@ -9,30 +9,37 @@
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
 
         <el-row :gutter="20">
-          <el-col :span="6">   <el-form-item label="用户名" style="margin-top: 15px">
-            <el-input v-model="searchForm.username" @change="search"></el-input>
-          </el-form-item></el-col>
-          <el-col :span="6">     <el-form-item label="身份" style="margin-top: 15px;">
-            <el-select v-model="searchForm.role" class="m-2" clearable filterable placeholder="请选择" @change="search">
-              <el-option
-                  v-for="item in roleOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item></el-col>
-          <el-col :span="6"><div class="grid-content bg-purple" /></el-col>
-          <el-col :span="6">   <el-form-item style="margin-top: 15px;float: right">
-            <el-button type="primary" @click="search">
-              <el-icon style="vertical-align: middle">
-                <search/>
-              </el-icon>
-              <span style="vertical-align: middle">查询</span>
-            </el-button>
-          </el-form-item></el-col>
+          <el-col :span="6">
+            <el-form-item label="用户名" style="margin-top: 15px">
+              <el-input v-model="searchForm.username" @change="search"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="身份" style="margin-top: 15px;">
+              <el-select v-model="searchForm.role" class="m-2" clearable filterable placeholder="请选择" @change="search">
+                <el-option
+                    v-for="item in roleOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <div class="grid-content bg-purple"/>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item style="margin-top: 15px;float: right">
+              <el-button type="primary" @click="search">
+                <el-icon style="vertical-align: middle">
+                  <search/>
+                </el-icon>
+                <span style="vertical-align: middle">查询</span>
+              </el-button>
+            </el-form-item>
+          </el-col>
         </el-row>
-
 
 
       </el-form>
