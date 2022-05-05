@@ -134,6 +134,7 @@
       </el-dialog>
     </div>
 
+    <!-- 修改部门信息 -->
     <div>
       <el-dialog v-model="dialogFormVisible" title="部门修改">
         <el-form :model="form" :rules="rules" ref="departmentFromRef">
@@ -141,7 +142,7 @@
             <el-input v-model.number="form.departmentId" style="width: 220px" @change="departmentIdChange"/>
           </el-form-item>
           <el-form-item label="部门名称" style="margin-left: 20px" prop="departmentName">
-            <el-input v-model="form.departmentName" style="width: 220px"/>
+            <el-input v-model="form.departmentName" @change="departmentNameChange" style="width: 220px"/>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -163,6 +164,8 @@ export default {
   name: "departmentInfo",
   data() {
     return {
+      beforeModifyDepartmentId: '',
+      beforeModifyDepartmentName: '',
       currentPage: 1,
       pageSize: 5,
       total: 0,
@@ -201,7 +204,30 @@ export default {
     this.listDepartmentInfo();
   },
   methods: {
+    departmentNameChange() {
+      if (this.form.departmentName === this.beforeModifyDepartmentName) {
+        return;
+      }
+      let params = {
+        department_name: this.form.departmentName
+      };
+      this.$http.post('api/department/check_department', params).then(resp => {
+        let apiData = resp.data;
+        if (apiData.data.checkout_code === -5003) {
+          ElMessageBox.alert('该部门名称已存在，请重新输入', '错误', {
+            confirmButtonText: '确定',
+            type: "error",
+            callback: () => {
+              this.form.departmentName = this.beforeModifyDepartmentName;
+            }
+          });
+        }
+      });
+    },
     departmentIdChange() {
+      if (this.beforeModifyDepartmentId === this.form.departmentId) {
+        return;
+      }
       let params = {
         department_id: this.form.departmentId
       };
@@ -213,12 +239,13 @@ export default {
             confirmButtonText: '确定',
             type: "error",
             callback: () => {
-              this.$refs["departmentFromRef"].resetFields(['departmentId']);
+              this.form.departmentId = Number(this.beforeModifyDepartmentId);
             }
           });
         }
       });
     },
+
     // 获取部门编号和部门名称的选项
     listDepartmentOptions() {
       let params = {
@@ -281,17 +308,31 @@ export default {
       });
     },
     openModifyRoleDialog(row) {
-      console.log(row);
       this.dialogFormVisible = true;
       this.form.id = row.id;
-      this.form.departmentId = row.departmentId;
+      this.form.departmentId = Number(row.departmentId);
       this.form.departmentName = row.departmentName;
-      // this.beforeModifyRole = row.role;
+      this.beforeModifyDepartmentId = row.departmentId;
+      this.beforeModifyDepartmentName = row.departmentName;
     },
     modifyDepartment() {
       this.$refs['departmentFromRef'].validate((valid) => {
         if (valid) {
-          console.log(valid);
+          let params = {
+            id: this.form.id,
+            department_id: this.form.departmentId,
+            department_name: this.form.departmentName,
+          };
+          this.$http.put('api/department/update_department', params).then(resp => {
+            let apiData = resp.data;
+            if (apiData.code === 0) {
+              this.$message.success("修改成功");
+              this.dialogFormVisible = false;
+              this.listDepartmentInfo();
+            } else {
+              this.$message.error("修改接口错误");
+            }
+          });
         }
       })
     },
