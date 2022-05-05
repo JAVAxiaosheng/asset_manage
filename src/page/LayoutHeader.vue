@@ -3,9 +3,9 @@
     <el-dropdown class="down">
     <span class="el-dropdown-link">
        用户名：{{ username }}
-      <el-icon class="el-icon--right">
-        <arrow-down />
-      </el-icon>
+<!--      <el-icon class="el-icon&#45;&#45;right">-->
+<!--        <arrow-down />-->
+<!--      </el-icon>-->
     </span>
       <template #dropdown>
         <el-dropdown-menu>
@@ -59,7 +59,7 @@ export default {
   font-size: 16px;
 }
 /deep/ .down{
-  margin-top: 16px;
+  margin-top: 20px;
   float: right;
 }
 </style>
