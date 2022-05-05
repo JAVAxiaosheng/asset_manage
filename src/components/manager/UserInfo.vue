@@ -173,6 +173,7 @@ export default {
                 });
                 Cookies.remove('user_name');
                 Cookies.remove('role');
+                Cookies.remove('id');
               }
             });
           }
@@ -210,6 +211,7 @@ export default {
                 });
                 Cookies.remove('user_name');
                 Cookies.remove('role');
+                Cookies.remove('id');
               }
             });
           }

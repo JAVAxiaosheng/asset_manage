@@ -74,6 +74,7 @@ export default {
           if (apiData.code === 0) {
             Cookies.set('user_name', apiData.data.userName);
             Cookies.set('role', apiData.data.role);
+            Cookies.set('id',apiData.data.id);
             this.$router.push({
               path: '/home'
             });

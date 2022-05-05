@@ -55,7 +55,7 @@
         <el-menu-item index="2-2">维修记录</el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item index="4">
+      <el-menu-item index="employee-change-password">
         <template #title>
           <el-icon>
             <unlock/>

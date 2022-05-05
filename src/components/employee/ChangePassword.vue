@@ -1,46 +1,6 @@
 <template>
   <div>
 
-    <div style="background-color: #fdfdfe">
-      <el-form :inline="true" class="demo-form-inline">
-
-        <el-row :gutter="20">
-          <el-col :span="10">
-            <el-form-item label="用户名" style="margin-top: 15px;">
-              <el-select v-model="id" class="m-2" clearable filterable placeholder="请选择要修改的用户" @change="search">
-                <el-option
-                    v-for="item in userOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <div class="grid-content bg-purple"/>
-
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"/>
-          </el-col>
-          <el-col :span="6">
-
-            <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="search">
-                <el-icon style="vertical-align: middle">
-                  <search/>
-                </el-icon>
-                <span style="vertical-align: middle">查询</span>
-              </el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-
-      </el-form>
-    </div>
-
     <div style="background-color: #fdfdfe;margin-top: 15px">
       <el-form :inline="true" :model="userInfo" ref="userFormRef" class="demo-form-inline" :rules="rules">
 
@@ -50,12 +10,12 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="ID" style="margin-top: 15px;">
-              <el-input v-model="userInfo.id" placeholder="请先选择用户" disabled style="margin-left: 27px"></el-input>
+              <el-input v-model="userInfo.id" disabled style="margin-left: 27px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="用户名" style="margin-top: 15px;">
-              <el-input v-model="userInfo.username" placeholder="请先选择用户" disabled style="margin-left: 15px"></el-input>
+              <el-input v-model="userInfo.username" disabled style="margin-left: 15px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -69,12 +29,12 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="身份" style="margin-top: 15px;">
-              <el-input v-model="userInfo.role" placeholder="请先选择用户" disabled style="margin-left: 15px"></el-input>
+              <el-input v-model="userInfo.role" disabled style="margin-left: 15px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="旧密码" style="margin-top: 15px;">
-              <el-input v-model="userInfo.oldPassword" placeholder="请先选择用户" disabled
+              <el-input v-model="userInfo.oldPassword" disabled
                         style="margin-left: 15px"></el-input>
             </el-form-item>
           </el-col>
@@ -151,8 +111,6 @@ export default {
 
   data() {
     return {
-      id: '',
-      userOptions: [],
       userInfo: {
         id: '',
         username: '',
@@ -176,54 +134,23 @@ export default {
     }
   },
   mounted() {
-    this.listUserName();
+    this.userInfo.id = Cookies.get('id');
+    this.search();
   },
   methods: {
-    listUserName() {
-      let params = {
-        pageNum: 1,
-        pageSize: 100,
-        role: -1,
-        id: -1,
-      };
-      this.$http.get('api/user_info/query_user', {params}).then(resp => {
-        let apiData = resp.data;
-        if (apiData.code === 0) {
-          for (let i = 0; i < apiData.data.length; i++) {
-            this.userOptions.push({
-              label: apiData.data[i].userName,
-              value: apiData.data[i].id,
-            })
-
-          }
-        } else {
-          this.$message.error('查询接口错误');
-        }
-      });
-    },
     search() {
-      if (this.id === "") {
-        this.userInfo = {};
-        this.reset();
-        return;
-      }
       let params = {
         pageNum: 1,
         pageSize: 1,
-        role: -1,
-        id: this.id,
+        role: 0,
+        id: this.userInfo.id,
       };
       this.$http.get('api/user_info/query_user', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {
-          // console.log(apiData.data);
+          console.log(apiData.data);
           this.userInfo.id = apiData.data[0].id;
-          if (apiData.data[0].role === 1) {
-            this.userInfo.role = '管理员';
-          } else {
-            this.userInfo.role = '普通用户';
-          }
-
+          this.userInfo.role = '普通用户';
           this.userInfo.username = apiData.data[0].userName;
           this.userInfo.oldPassword = apiData.data[0].password;
 
