@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/头像.jpeg" alt="">
+        <img src="../assets/bilibili_blue.svg" alt="">
       </div>
       <!-- 登录表单区域 -->
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
@@ -100,12 +100,12 @@ export default {
 .login_box {
   width: 300px;
   height: 350px;
-  background-color: transparent;
+  background-color: rgba(111,111,111,.2);
   position: absolute;
   left: 70%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border: 5px rgba(110, 147, 114, 0.3) solid;
+  //border: 5px rgba(110, 147, 114, 0.3) solid;
 
   .avatar_box {
     height: 80px;
