@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from "@/components/Home";
 import LayoutContainer from '../page/LayoutContainer'
 import Login from "@/components/Login";
+import Register from "@/components/Register"
 
 import UserInfo from "@/components/manager/UserInfo";
 import ChangePassword from '@/components/manager/ChangePassword';
@@ -19,7 +20,13 @@ const router = createRouter({
             path: '/',
             name: "Login",
             component: Login,
-        }, {
+        },
+        {
+         path:"/register",
+         name:"Register",
+         component:Register
+        },
+        {
             path: '/LayoutContainer',
             name: "LayoutContainer",
             component: LayoutContainer,

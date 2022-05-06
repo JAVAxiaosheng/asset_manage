@@ -1,24 +1,28 @@
 <template>
-  <div class="login_container">
-    <div class="login_box">
+  <div class="register_container">
+    <div class="register_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
         <img src="../assets/bilibili_blue.svg" alt="">
       </div>
-      <!-- 登录表单区域 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
+      <!-- 注册表单区域 -->
+      <el-form ref="registerFormRef" :model="registerForm" :rules="registerFormRules" class="register_form">
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+          <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
+          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <!-- 确认密码 -->
+        <el-form-item prop="confirmPassword">
+          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="info" @click="Register">注册</el-button>
+          <el-button type="primary" @click="register">注册</el-button>
+          <el-button type="info" @click="resetRegisterForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -30,24 +34,27 @@ import Cookies from 'js-cookie'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
+  name: "Register",
   data() {
     return {
-      // 这是登录表单的数据绑定对象
-      loginForm: {
+      // 这是登注册录表单的数据绑定对象
+      registerForm: {
         username: '',
         password: '',
-        role: '',
+        confirmPassword: '',
       },
       // 这是表单的验证规则对象
-      loginFormRules: {
+      registerFormRules: {
         // 验证用户名是否合法
         username: [
-          {required: true, message: '请输入登录名称', trigger: 'blur'}
+          {required: true, message: '请输入注册名称', trigger: 'blur'}
         ],
         // 验证密码是否合法
         password: [
-          {required: true, message: '请输入登录密码', trigger: 'blur'}
+          {required: true, message: '请输入注册密码', trigger: 'blur'}
+        ],
+        confirmPassword: [
+          {required: true, message: '请确定密码', trigger: 'blur'}
         ]
       }
     };
@@ -55,14 +62,14 @@ export default {
   mounted() {
   },
   methods: {
-    login() {
-      this.$refs.loginFormRef.validate(async valid => {
+    register() {
+      this.$refs.registerFormRef.validate(async valid => {
         if (!valid) return;
         let params = {
-          userName: this.loginForm.username,
-          password: this.loginForm.password
+          userName: this.registerForm.username,
+          password: this.registerForm.password
         };
-        this.$http.post('/api/user_info/login', params).then(resp => {
+        this.$http.post('/api/user_info/register', params).then(resp => {
           let apiData = resp.data
 
           if (apiData.code === 0) {
@@ -81,25 +88,23 @@ export default {
     },
 
 
-    // 点击注册，进行注册
-    Register() {
-      console.log("qqq")
-      this.$router.push({
-        path: '/register'
-      });
+    // 点击重置按钮，重置注册表单
+    resetRegisterForm() {
+      // console.log(this);
+      this.$refs.registerFormRef.resetFields()
     }
   }
 }
 </script>
 <style lang="less" scoped>
-.login_container {
+.register_container {
   height: 100%;
   width: 100%;
   background: url("../assets/background.jpg") no-repeat center;
   background-size: 100% 100%;
 }
 
-.login_box {
+.register_box {
   width: 300px;
   height: 350px;
   background-color: rgba(111,111,111,.2);
@@ -136,7 +141,7 @@ export default {
   background-color: transparent;
 }
 
-.login_form {
+.register_form {
   width: 100%;
   position: absolute;
   top: 35%;
