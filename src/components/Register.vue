@@ -16,9 +16,21 @@
           <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <!-- 确认密码 -->
-        <el-form-item prop="confirmPassword">
-          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请输入密码"></el-input>
-        </el-form-item>
+<!--        <el-form-item prop="confirmPassword">-->
+<!--          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请确定密码"></el-input>-->
+<!--        </el-form-item>-->
+        <!-- 身份选择 -->
+<!--        <el-form-item style="margin-left: 20px">-->
+<!--          <el-select  v-model="registerForm.role" class="m-2" filterable-->
+<!--                     placeholder="选择身份">-->
+<!--            <el-option-->
+<!--                v-for="item in roleOptions"-->
+<!--                :key="item.value"-->
+<!--                :label="item.label"-->
+<!--                :value="item.value"-->
+<!--            />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="register">注册</el-button>
@@ -30,7 +42,7 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -42,7 +54,15 @@ export default {
         username: '',
         password: '',
         confirmPassword: '',
+        role:0
       },
+      roleOptions: [{
+        label: '管理员',
+        value: 1,
+      }, {
+        label: '普通用户',
+        value: 0,
+      }],
       // 这是表单的验证规则对象
       registerFormRules: {
         // 验证用户名是否合法
@@ -67,30 +87,24 @@ export default {
         if (!valid) return;
         let params = {
           userName: this.registerForm.username,
-          password: this.registerForm.password
+          password: this.registerForm.password,
+          role:this.registerForm.role
         };
-        this.$http.post('/api/user_info/register', params).then(resp => {
-          let apiData = resp.data
-
-          if (apiData.code === 0) {
-            Cookies.set('user_name', apiData.data.userName);
-            Cookies.set('role', apiData.data.role);
-            Cookies.set('id', apiData.data.id);
+        this.$http.post('api/user_info/save_user', params).then(resp => {
+          if(resp.data.code===0){
+            this.$message.success("注册成功，请登录");
             this.$router.push({
-              path: '/home'
-            });
-          } else {
-            this.$message.error(apiData.message);
-            return;
+              path:'/'
+            })
+          }else {
+            this.$message.error("该用户已存在，请勿重复注册");
           }
         });
       });
     },
 
-
     // 点击重置按钮，重置注册表单
     resetRegisterForm() {
-      // console.log(this);
       this.$refs.registerFormRef.resetFields()
     }
   }
