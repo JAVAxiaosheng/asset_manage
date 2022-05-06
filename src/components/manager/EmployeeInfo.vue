@@ -19,7 +19,15 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="部门名称" style="margin-top: 15px">
-              <el-input v-model="searchForm.employee_state" @change="search"></el-input>
+              <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
+                         @change="search">
+                <el-option
+                    v-for="item in departmentNameOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -145,8 +153,7 @@
             <el-input v-model.number="addEmployeeForm.employee_age" style="width: 220px"/>
           </el-form-item>
           <el-form-item label="部门" style="margin-left: 20px" prop="department_id">
-            <el-select v-model="addEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择"
-                       @change="search">
+            <el-select v-model="addEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择">
               <el-option
                   v-for="item in departmentNameOptions"
                   :key="item.value"
@@ -267,7 +274,7 @@ export default {
   },
   data() {
     return {
-      currentPage: 1,
+      pageNum: 1,
       pageSize: 100,
       addEmployeeDialogFormVisible: false,
       updateEmployeeDialogFormVisible: false,
@@ -383,6 +390,7 @@ export default {
 
   mounted() {
     this.listDepartmentOptions();
+    this.search();
   },
   methods: {
     openModifyEmployeeDialog() {
@@ -390,6 +398,32 @@ export default {
     },
     // 查询用户
     search() {
+      let params = {
+        page_size: this.pageSize,
+        page_num: this.pageNum,
+        // position: this.searchForm.position,
+        // employee_name: this.searchForm.employee_name,
+        // employee_num: this.searchForm.employee_num,
+        // employee_state: this.searchForm.employee_state
+      };
+      if (this.searchForm.position !== '') {
+        params['position'] = this.searchForm.position;
+      }
+      if (this.searchForm.employee_name !== '') {
+        params['employee_name']=this.searchForm.employee_name;
+      }
+      if (this.searchForm.employee_num!=='') {
+        params['employee_num']=this.searchForm.employee_num;
+      }
+      if (this.searchForm.employee_state!=='') {
+        params['employee_state']=this.searchForm.employee_state;
+      }
+
+      this.$http.get('api/employee/query_employee', {params}).then(resp => {
+        let apiData = resp.data;
+        // console.log(apiData);
+        this.tableData=apiData.data;
+      })
 
     },
     // 添加员工
@@ -409,10 +443,10 @@ export default {
       this.$http.post('api/employee/save_employee', params).then(resp => {
         let apiDate = resp.data;
         console.log(apiDate);
-        if(apiDate.code===0){
+        if (apiDate.code === 0) {
           this.$message.success("添加成功")
           this.addEmployeeDialogFormVisible = false;
-
+          this.search();
         }
 
       })
@@ -436,20 +470,31 @@ export default {
     },
 
     // 删除用户
-    // deleteEmployee(row){
-    //   let params = {
-    //     id: row.id,
-    //   };
-    //   this.$http.delete('/api/department/delete_department', {data: params}).then(resp => {
-    //     console.log(resp)
-    //   })
-    // }
+    deleteEmployee(row){
+      console.log(row)
+      let params = {
+        id: row.id,
+      };
+      this.$http.delete('/api/employee/delete_employee', {data: params}).then(resp => {
+        console.log(resp);
+        let apiData=resp.data;
+        if (apiData.code === 0) {
+          this.$message.success("删除成功");
+          this.search();
+        } else {
+          this.$message.error("修改接口错误," + apiData.message)
+        }
+      })
+    }
   },
   handleSizeChange(val) {
+    this.search();
     this.pageSize = val;
-  },
+},
   handleCurrentChange(val) {
-    this.currentPage = val;
+    this.search();
+    this.pageNum = val;
+
   }
 }
 </script>
