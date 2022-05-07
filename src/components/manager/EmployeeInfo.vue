@@ -554,9 +554,11 @@ export default {
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {
-          this.tableData = apiData.data;
-          this.total = apiData.total;
-          this.loading = false;
+          setTimeout(() => {
+            this.tableData = apiData.data;
+            this.total = apiData.total;
+            this.loading = false;
+          }, 500);
         } else {
           this.$message.error("查询列表接口错误");
           this.loading = false;
@@ -588,6 +590,8 @@ export default {
               this.addEmployeeForm = [];
               this.$refs.addEmployeeFromRef.resetFields();
               this.search();
+            } else {
+              this.$message.error("添加接口错误")
             }
           })
         }

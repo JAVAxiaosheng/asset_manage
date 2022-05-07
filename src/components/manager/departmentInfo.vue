@@ -58,7 +58,7 @@
 
     <div style="margin-top: 10px">
       <!-- 列表展示 -->
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
         <el-table-column prop="id" label="ID"/>
         <el-table-column prop="departmentId" label="部门编号">
           <template v-slot="props">
@@ -163,6 +163,7 @@ export default {
   name: "departmentInfo",
   data() {
     return {
+      loading: false,
       beforeModifyDepartmentId: '',
       beforeModifyDepartmentName: '',
       currentPage: 1,
@@ -318,6 +319,7 @@ export default {
 
     //获取部门表的信息
     listDepartmentInfo() {
+      this.loading = true;
       let params = {
         page_num: this.currentPage,
         page_size: this.pageSize
@@ -330,8 +332,16 @@ export default {
       }
       this.$http.get('api/department/query_department', {params}).then(resp => {
         let apiData = resp.data;
-        this.tableData = apiData.data;
-        this.total = apiData.total;
+        if (apiData.code === 0) {
+          setTimeout(() => {
+            this.tableData = apiData.data;
+            this.total = apiData.total;
+            this.loading = false;
+          }, 500);
+        } else {
+          this.$message.error("查询列表接口错误");
+          this.loading = false;
+        }
       });
     },
 

@@ -47,7 +47,7 @@
 
     <!-- 列表展示 -->
     <div style="margin-top: 10px">
-      <el-table :data="tableData" border stripe style="width: 100%">
+      <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
         <el-table-column prop="id" label="ID"/>
         <el-table-column prop="userName" label="用户名"/>
         <el-table-column prop="role" label="身份">
@@ -135,6 +135,7 @@ export default {
   name: "UserInfo",
   data() {
     return {
+      loading: false,
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -240,6 +241,7 @@ export default {
       this.currentPage = val;
     },
     listUserInfo() {
+      this.loading = true;
       let params = {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
@@ -253,10 +255,17 @@ export default {
         params['role'] = this.searchForm.role;
       }
       this.$http.get('api/user_info/query_user', {params}).then(resp => {
-        console.log(resp.data);
         let apiData = resp.data;
-        this.total = apiData.total;
-        this.tableData = apiData.data;
+        if (apiData.code === 0) {
+          setTimeout(() => {
+            this.total = apiData.total;
+            this.tableData = apiData.data;
+            this.loading = false;
+          }, 500);
+        } else {
+          this.$message.error("查询列表接口错误");
+          this.loading = false;
+        }
       });
     }
   }

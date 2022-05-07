@@ -10,14 +10,14 @@
 
           </el-col>
           <el-col :span="8">
-            <el-form-item label="姓名" style="margin-top: 15px">
-              <el-input v-model="searchForm.employee_name" @change="search" style="width:150px;"></el-input>
+            <el-form-item label="姓名" style="margin-top: 20px">
+              <el-input v-model="searchForm.employee_name" @change="search" style="width:200px;"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="部门名称" style="margin-top: 15px;margin-left: -50px">
+            <el-form-item label="部门名称" style="margin-top: 20px;margin-left: -50px">
               <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
-                         @change="search">
+                         @change="search" style="width: 200px">
                 <el-option
                     v-for="item in departmentNameOptions"
                     :key="item.value"
@@ -30,7 +30,7 @@
           <el-col :span="6">
           </el-col>
           <el-col :span="3">
-            <el-form-item style="margin-top: 15px;float: right">
+            <el-form-item style="margin-top: 20px;float: right">
               <el-button type="primary" @click="search" round plain>
                 <el-icon style="vertical-align: middle">
                   <search/>
@@ -43,7 +43,7 @@
       </el-form>
     </div>
     <!--    列表展示-->
-    <el-table :data="tableData" border stripe style="width: 100%">
+    <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
       <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
         <template v-slot="props">
           <el-tag type="info">{{ props.row.employee_num }}</el-tag>
@@ -112,6 +112,7 @@ export default {
   name: "EmployeeInfo",
   data() {
     return {
+      loading: false,
       tableData: [],
       pageNum: 1,
       pageSize: 10,
@@ -157,6 +158,7 @@ export default {
     },
     // 查询员工信息列表
     listEmployee() {
+      this.loading = true;
       let params = {
         page_num: this.pageNum,
         page_size: this.pageSize
@@ -170,10 +172,14 @@ export default {
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {
-          this.tableData = apiData.data;
-          this.total = apiData.total;
+          setTimeout(() => {
+            this.tableData = apiData.data;
+            this.total = apiData.total;
+            this.loading = false;
+          }, 500);
         } else {
-          this.$message.error("查询接口错误")
+          this.$message.error("查询列表接口错误");
+          this.loading = false;
         }
       });
     },
