@@ -4,7 +4,7 @@
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="el-menu-vertical-demo"
-        default-active="2"
+        :default-active="$router.currentRoute.value.fullPath"
         text-color="#fff"
         :router="true"
         :unique-opened="true"
@@ -30,8 +30,8 @@
           </el-icon>
           <span>员工管理</span>
         </template>
-        <el-menu-item index="department_info">部门信息</el-menu-item>
-        <el-menu-item index="manager_employee_info">员工信息</el-menu-item>
+        <el-menu-item index="/department_info">部门信息</el-menu-item>
+        <el-menu-item index="/manager_employee_info">员工信息</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="2">
@@ -63,8 +63,8 @@
           </el-icon>
           <span>用户管理</span>
         </template>
-        <el-menu-item index="user-info">用户信息</el-menu-item>
-        <el-menu-item index="change-password">修改密码</el-menu-item>
+        <el-menu-item index="/user-info">用户信息</el-menu-item>
+        <el-menu-item index="/change-password">修改密码</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -78,6 +78,8 @@ export default {
   // components: {Edit},
   data() {
     return {};
+  },
+  mounted() {
   },
   methods: {
     handleOpen(key, keyPath) {

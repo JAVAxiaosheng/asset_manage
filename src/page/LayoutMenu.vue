@@ -4,7 +4,7 @@
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="el-menu-vertical-demo"
-        default-active="1"
+        :default-active="$router.currentRoute.value.fullPath"
         text-color="#fff"
         :router="true"
         :unique-opened="true"
@@ -30,8 +30,8 @@
           </el-icon>
           <span>员工管理</span>
         </template>
-        <el-menu-item index="employee_info">员工信息</el-menu-item>
-        <el-menu-item index="change_myself_info">修改信息</el-menu-item>
+        <el-menu-item index="/employee_info">员工信息</el-menu-item>
+        <el-menu-item index="/change_myself_info">修改信息</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="2">
@@ -56,7 +56,7 @@
         <el-menu-item index="2-2">维修记录</el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item index="employee-change-password">
+      <el-menu-item index="/employee-change-password">
         <template #title>
           <el-icon>
             <unlock/>
