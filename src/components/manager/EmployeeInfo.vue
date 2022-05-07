@@ -3,14 +3,8 @@
 
     <div style="background-color: #fdfdfe">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-
         <el-row :gutter="20">
-          <el-col :span="4">
-            <el-form-item label="员工编号" style="margin-top: 15px;margin-left: 10px">
-              <el-input v-model="searchForm.employee_num" @change="search"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
+          <el-col :span="6" style="margin-left: 20px">
             <el-form-item label="姓名" style="margin-top: 15px">
               <el-input v-model="searchForm.employee_name" @change="search"></el-input>
             </el-form-item>
@@ -41,9 +35,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
-            <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="search">
+          <el-col :span="3">
+            <el-form-item style="margin-top: 15px;margin-left:10px;float: right">
+              <el-button type="primary" plain round @click="search">
                 <el-icon style="vertical-align: middle">
                   <search/>
                 </el-icon>
@@ -53,9 +47,10 @@
           </el-col>
           <el-col :span="2">
             <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="addEmployeeDialogFormVisible=true">
+
+              <el-button type="success" round @click="addEmployeeDialogFormVisible=true">
                 <el-icon style="vertical-align: middle">
-                  <search/>
+                  <plus/>
                 </el-icon>
                 <span style="vertical-align: middle">添加</span>
               </el-button>
@@ -68,14 +63,25 @@
     <div style="margin-top: 10px">
       <!-- 列表展示 -->
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="employee_num" label="员工编号"/>
-        <el-table-column prop="employee_name" label="姓名"/>
-        <el-table-column prop="employee_sex" label="性别"/>
-        <el-table-column prop="employee_age" label="年龄"/>
-        <el-table-column prop="department_id" label="部门名称"/>
-        <el-table-column prop="position" label="职务"/>
-        <el-table-column prop="address" label="办公地址" show-overflow-tooltip="true"/>
-        <el-table-column prop="phone" label="电话">
+        <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
+          <template v-slot="props">
+            <el-tag type="info">{{ props.row.employee_num }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="employee_name" label="姓名" min-width="100px"/>
+        <el-table-column prop="employee_sex" label="性别" min-width="80px"/>
+        <el-table-column prop="employee_age" label="年龄" min-width="80px"/>
+        <el-table-column prop="department_name" label="所在部门" min-width="120px">
+          <template v-slot="props">
+            <el-tag>{{ props.row.department_name }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="position" label="职位" min-width="120px">
+          <template v-slot="props">
+            <el-tag type="warning">{{ props.row.position }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="电话" min-width="150px">
           <template v-slot="props">
             {{ props.row.phone ? props.row.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1****$3") : "" }}
             <el-tooltip
@@ -88,13 +94,26 @@
               </el-icon>
             </el-tooltip>
           </template>
-
         </el-table-column>
-
-        <el-table-column prop="employee_state" label="员工状态"/>
+        <el-table-column prop="address" label="地址" width="100px" show-overflow-tooltip="true"/>
+        <el-table-column prop="employee_state" label="状态" min-width="80px" fixed="right">
+          <template v-slot="props">
+            <el-tag type="success" v-if="props.row.employee_state === '在职'">
+              {{ props.row.employee_state }}
+            </el-tag>
+            <el-tag type="danger" v-else-if="props.row.employee_state === '离职'">
+              {{ props.row.employee_state }}
+            </el-tag>
+            <el-tag v-else>
+              {{ props.row.employee_state }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" fixed="right" width="110">
           <template v-slot="props">
-            <el-button type="primary" plain circle @click="openModifyEmployeeDialog(props.row)">
+            <el-button type="primary" plain circle
+                       v-if="props.row.employee_state !== '离职'"
+                       @click="openModifyEmployeeDialog(props.row)">
               <el-icon style="vertical-align: middle">
                 <edit/>
               </el-icon>
@@ -116,14 +135,12 @@
           </template>
         </el-table-column>
       </el-table>
-
-
       <!--分页-->
       <el-pagination
           background
           class="pageInput"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @current-change="handleNumChange"
           v-model:currentPage="pageNum"
           v-model:page-size="pageSize"
           :page-sizes="[5, 10, 15, 20]"
@@ -134,60 +151,92 @@
 
     </div>
 
-    <!--    添加员工-->
+    <!-- 添加员工-->
     <div>
-      <el-dialog v-model="addEmployeeDialogFormVisible" title="添加员工">
+      <el-dialog v-model="addEmployeeDialogFormVisible" title="添加员工" width="55%">
         <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="addEmployeeFromRef">
-          <el-form-item label="员工编号" style="margin-left: 20px" prop="employee_num">
-            <el-input v-model.number="addEmployeeForm.employee_num" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="姓名" style="margin-left: 20px" prop="employee_name">
-            <el-input v-model="addEmployeeForm.employee_name" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="性别" style="margin-left: 20px">
-            <el-select v-model="addEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择"
-                       @change="search">
-              <el-option
-                  v-for="item in sexOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="年龄" style="margin-left: 20px" prop="employee_age">
-            <el-input v-model.number="addEmployeeForm.employee_age" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="部门" style="margin-left: 20px" prop="department_id">
-            <el-select v-model="addEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择">
-              <el-option
-                  v-for="item in departmentNameOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="岗位" style="margin-left: 20px">
-            <el-input v-model="addEmployeeForm.position" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="员工状态" style="margin-top: 15px;">
-            <el-select v-model="addEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
-                       @change="search">
-              <el-option
-                  v-for="item in stateOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="电话" style="margin-left: 20px" prop="phone">
-            <el-input v-model="addEmployeeForm.phone" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="地址" style="margin-left: 20px">
-            <el-input v-model="addEmployeeForm.address" :rows="2" type="textarea" style="width: 220px"/>
-          </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="员工编号" style="margin-left: 20px" prop="employee_num">
+                <el-input v-model.number="addEmployeeForm.employee_num" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名" style="margin-left: 20px"
+                            prop="employee_name">
+                <el-input v-model="addEmployeeForm.employee_name" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别" style="margin-left: 20px">
+                <el-select v-model="addEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择"
+                           @change="search">
+                  <el-option
+                      v-for="item in sexOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄" style="margin-left: 20px"
+                            prop="employee_age">
+                <el-input v-model.number="addEmployeeForm.employee_age" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门" style="margin-left: 20px"
+                            prop="department_id">
+                <el-select v-model="addEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择">
+                  <el-option
+                      v-for="item in departmentNameOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;岗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
+                <el-input v-model="addEmployeeForm.position" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工状态" style="margin-top: 15px;">
+                <el-select v-model="addEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
+                           @change="search">
+                  <el-option
+                      v-for="item in stateOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话"
+                            style="margin-left: 20px;margin-top: 15px" prop="phone">
+                <el-input v-model="addEmployeeForm.phone" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址" style="margin-left: 20px">
+                <el-input v-model="addEmployeeForm.address" :rows="4" type="textarea" style="width: 600px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
@@ -200,59 +249,90 @@
 
     <!-- 修改员工信息 -->
     <div>
-      <el-dialog v-model="updateEmployeeDialogFormVisible" title="员工信息修改">
+      <el-dialog v-model="updateEmployeeDialogFormVisible" title="员工信息修改" width="55%">
         <el-form :model="updateEmployeeForm" :rules="updateEmployeeRules" ref="updateEmployeeFromRef">
-          <el-form-item label="员工编号" style="margin-left: 20px" prop="employee_num">
-            <el-input v-model.number="updateEmployeeForm.employee_num" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="姓名" style="margin-left: 20px" prop="employee_name">
-            <el-input v-model="updateEmployeeForm.employee_name" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="性别" style="margin-left: 20px">
-            <el-select v-model="updateEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择">
-              <el-option
-                  v-for="item in sexOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="年龄" style="margin-left: 20px">
-            <el-input v-model.number="updateEmployeeForm.employee_age" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="部门" style="margin-left: 20px">
-            <el-select v-model="updateEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择"
-                     >
-              <el-option
-                  v-for="item in departmentNameOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="岗位" style="margin-left: 20px" >
-            <el-input v-model="updateEmployeeForm.position" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="地址" style="margin-left: 20px" >
-            <el-input v-model="updateEmployeeForm.address" style="width: 220px"/>
-          </el-form-item>
-
-          <el-form-item label="员工状态" style="margin-top: 15px;">
-            <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择">
-              <el-option
-                  v-for="item in stateOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="电话" style="margin-left: 20px">
-            <el-input v-model="updateEmployeeForm.phone" style="width: 220px"/>
-          </el-form-item>
-
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="员工编号" style="margin-left: 20px" prop="employee_num">
+                <el-input v-model.number="updateEmployeeForm.employee_num" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名" style="margin-left: 20px"
+                            prop="employee_name">
+                <el-input v-model="updateEmployeeForm.employee_name" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别" style="margin-left: 20px">
+                <el-select v-model="updateEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择"
+                           @change="search">
+                  <el-option
+                      v-for="item in sexOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄" style="margin-left: 20px"
+                            prop="employee_age">
+                <el-input v-model.number="updateEmployeeForm.employee_age" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门" style="margin-left: 20px"
+                            prop="department_id">
+                <el-select v-model="updateEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择">
+                  <el-option
+                      v-for="item in departmentNameOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;岗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
+                <el-input v-model="updateEmployeeForm.position" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工状态" style="margin-top: 15px;">
+                <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
+                           @change="search">
+                  <el-option
+                      v-for="item in stateOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话"
+                            style="margin-left: 20px;margin-top: 15px" prop="phone">
+                <el-input v-model="updateEmployeeForm.phone" style="width: 220px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址" style="margin-left: 20px">
+                <el-input v-model="updateEmployeeForm.address" :rows="4" type="textarea" style="width: 600px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
@@ -262,8 +342,6 @@
         </template>
       </el-dialog>
     </div>
-
-
   </div>
 </template>
 
@@ -275,9 +353,8 @@ export default {
   data() {
     return {
       pageNum: 1,
-      // currentPage:1,
-      pageSize: 5,
-      total:1,
+      pageSize: 10,
+      total: 1,
       addEmployeeDialogFormVisible: false,
       updateEmployeeDialogFormVisible: false,
       departmentNameOptions: [],
@@ -294,7 +371,7 @@ export default {
         employee_state: '',
       },
       updateEmployeeForm: {
-        id:'',
+        id: '',
         employee_num: '',
         employee_name: '',
         employee_sex: '',
@@ -311,7 +388,7 @@ export default {
         employee_num: '',
         employee_name: '',
         employee_state: '',
-        department_id:''
+        department_id: ''
       },
       stateOptions: [{
         label: '在职',
@@ -389,6 +466,14 @@ export default {
     this.search();
   },
   methods: {
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.search();
+    },
+    handleNumChange(val) {
+      this.pageNum = val;
+      this.search();
+    },
     // 复制电话号码
     copyPhone(row) {
       let input = document.createElement('input')
@@ -402,31 +487,31 @@ export default {
     // 修改员工信息
     openModifyEmployeeDialog(row) {
       this.updateEmployeeDialogFormVisible = true;
-      console.log(row);
-      this.updateEmployeeForm.id=row.id;
-      this.updateEmployeeForm.department_id=row.department_id;
-      this.updateEmployeeForm.employee_name=row.employee_name;
-      this.updateEmployeeForm.employee_age=row.employee_age;
-      this.updateEmployeeForm.employee_num=row.employee_num;
-      this.updateEmployeeForm.employee_sex=row.employee_sex;
-      this.updateEmployeeForm.position=row.position;
-      this.updateEmployeeForm.employee_state=row.employee_state;
-      this.updateEmployeeForm.address=row.address;
-      this.updateEmployeeForm.phone=row.phone;
+      // console.log(row);
+      this.updateEmployeeForm.id = row.id;
+      this.updateEmployeeForm.department_id = row.department_id;
+      this.updateEmployeeForm.employee_name = row.employee_name;
+      this.updateEmployeeForm.employee_age = row.employee_age;
+      this.updateEmployeeForm.employee_num = Number(row.employee_num);
+      this.updateEmployeeForm.employee_sex = row.employee_sex;
+      this.updateEmployeeForm.position = row.position;
+      this.updateEmployeeForm.employee_state = row.employee_state;
+      this.updateEmployeeForm.address = row.address;
+      this.updateEmployeeForm.phone = row.phone;
     },
     // 确认修改
-    modifyEmployee(){
-      let params={
-        id:this.updateEmployeeForm.id,
-        department_id:this.updateEmployeeForm.department_id,
-        employee_name:this.updateEmployeeForm.employee_name,
-        employee_age:this.updateEmployeeForm.employee_age,
-        employee_num:this.updateEmployeeForm.employee_num,
-        employee_sex:this.updateEmployeeForm.employee_sex,
-        position:this.updateEmployeeForm.position,
-        employee_state:this.updateEmployeeForm.employee_state,
-        address:this.updateEmployeeForm.address,
-        phone:this.updateEmployeeForm.phone
+    modifyEmployee() {
+      let params = {
+        id: this.updateEmployeeForm.id,
+        department_id: this.updateEmployeeForm.department_id,
+        employee_name: this.updateEmployeeForm.employee_name.trim(),
+        employee_age: this.updateEmployeeForm.employee_age,
+        employee_num: this.updateEmployeeForm.employee_num,
+        employee_sex: this.updateEmployeeForm.employee_sex,
+        position: this.updateEmployeeForm.position.trim(),
+        employee_state: this.updateEmployeeForm.employee_state,
+        address: this.updateEmployeeForm.address.trim(),
+        phone: this.updateEmployeeForm.phone
       }
       this.$http.put('api/employee/update_employee', params).then(resp => {
         let apiDate = resp.data;
@@ -439,9 +524,9 @@ export default {
         }
       })
     },
-    updateEmployeeCancel(){
-      this.updateEmployeeDialogFormVisible=false;
-      this.$refs.updateEmployeeFromRef.resetFields();
+    updateEmployeeCancel() {
+      this.updateEmployeeDialogFormVisible = false;
+      this.$refs['updateEmployeeFromRef'].resetFields();
     },
     // 查询用户
     search() {
@@ -466,39 +551,44 @@ export default {
         let apiData = resp.data;
         console.log(apiData);
         this.tableData = apiData.data;
-        this.total=apiData.total;
+        this.total = apiData.total;
       })
 
     },
     // 添加员工
     addEmployee() {
-      let params = {
-        employee_name: this.addEmployeeForm.employee_name,
-        employee_sex: this.addEmployeeForm.employee_sex,
-        employee_age: this.addEmployeeForm.employee_age,
-        employee_state: this.addEmployeeForm.employee_state,
-        phone: this.addEmployeeForm.phone,
-        position: this.addEmployeeForm.position,
-        address: this.addEmployeeForm.address,
-        department_id: this.addEmployeeForm.department_id,
-        employee_num: this.addEmployeeForm.employee_num
-      };
 
-      this.$http.post('api/employee/save_employee', params).then(resp => {
-        let apiDate = resp.data;
-        console.log(apiDate);
-        if (apiDate.code === 0) {
-          this.$message.success("添加成功")
-          this.addEmployeeDialogFormVisible = false;
-          this.addEmployeeForm=[];
-          this.$refs.addEmployeeFromRef.resetFields();
-          this.search();
+      this.$refs['addEmployeeFromRef'].validate((valid) => {
+        if (valid) {
+          let params = {
+            employee_name: this.addEmployeeForm.employee_name,
+            employee_sex: this.addEmployeeForm.employee_sex,
+            employee_age: this.addEmployeeForm.employee_age,
+            employee_state: this.addEmployeeForm.employee_state,
+            phone: this.addEmployeeForm.phone,
+            position: this.addEmployeeForm.position,
+            address: this.addEmployeeForm.address,
+            department_id: this.addEmployeeForm.department_id,
+            employee_num: this.addEmployeeForm.employee_num
+          };
+          this.$http.post('api/employee/save_employee', params).then(resp => {
+            let apiDate = resp.data;
+            console.log(apiDate);
+            if (apiDate.code === 0) {
+              this.$message.success("添加成功")
+              this.addEmployeeDialogFormVisible = false;
+              this.addEmployeeForm = [];
+              this.$refs.addEmployeeFromRef.resetFields();
+              this.search();
+            }
+          })
         }
-      })
+      });
+
     },
-    addEmployeeCancel(){
-      this.addEmployeeDialogFormVisible=false;
-      this.$refs.addEmployeeFromRef.resetFields();
+    addEmployeeCancel() {
+      this.addEmployeeDialogFormVisible = false;
+      this.$refs['addEmployeeFromRef'].resetFields();
     },
     // 获取部门编号和部门名称的选项
     listDepartmentOptions() {
@@ -535,15 +625,6 @@ export default {
         }
       })
     }
-  },
-  handleSizeChange(val) {
-    this.search();
-    this.pageSize = val;
-  },
-  handleCurrentChange(val) {
-    this.search();
-    this.pageNum = val;
-
   }
 }
 </script>

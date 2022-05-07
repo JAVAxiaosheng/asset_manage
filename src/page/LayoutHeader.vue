@@ -22,6 +22,7 @@
 
 <script>
 import Cookies from 'js-cookie'
+import {ElMessageBox} from 'element-plus'
 
 export default {
   name: "LayoutHeader",
@@ -35,12 +36,26 @@ export default {
   },
   methods: {
     logout() {
-      Cookies.remove('id');
-      Cookies.remove('user_name');
-      Cookies.remove('role');
-      this.$router.push({
-        path: '/'
-      });
+      ElMessageBox.confirm(
+          '确定要退出吗',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      )
+          .then(() => {
+            Cookies.remove('id');
+            Cookies.remove('user_name');
+            Cookies.remove('role');
+            this.$router.push({
+              path: '/'
+            });
+          })
+          .catch(() => {
+
+          })
+
     }
   }
 }

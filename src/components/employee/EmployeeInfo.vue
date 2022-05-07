@@ -2,21 +2,21 @@
   <div>
 
 <!--    搜索-->
-    <div style="background-color: #fdfdfe">
+    <div style="background-color: #fdfdfe;margin-bottom: 15px">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
 
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="0">
 
           </el-col>
-          <el-col :span="4">
+          <el-col :span="8">
             <el-form-item label="姓名" style="margin-top: 15px">
-              <el-input v-model="searchForm.employee_name" @change="search"></el-input>
+              <el-input v-model="searchForm.employee_name" @change="search" style="width:150px;"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="部门名称" style="margin-top: 15px">
-              <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
+            <el-form-item label="部门名称" style="margin-top: 15px;margin-left: -50px">
+              <el-select v-model="searchForm.department_id" class="m-2"  clearable filterable placeholder="请选择"
                          @change="search">
                 <el-option
                     v-for="item in departmentNameOptions"
@@ -29,9 +29,9 @@
           </el-col>
           <el-col :span="6">
           </el-col>
-          <el-col :span="2">
+          <el-col :span="3">
             <el-form-item style="margin-top: 15px;float: right">
-              <el-button type="primary" @click="search">
+              <el-button type="primary" @click="search" round plain>
                 <el-icon style="vertical-align: middle">
                   <search/>
                 </el-icon>
