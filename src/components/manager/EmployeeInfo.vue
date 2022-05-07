@@ -8,7 +8,7 @@
 
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-form-item label="员工编号" style="margin-top: 15px">
+            <el-form-item label="员工编号" style="margin-top: 15px;margin-left: 10px">
               <el-input v-model="searchForm.employee_num" @change="search"></el-input>
             </el-form-item>
           </el-col>
@@ -17,7 +17,7 @@
               <el-input v-model="searchForm.employee_name" @change="search"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="部门名称" style="margin-top: 15px">
               <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
@@ -30,7 +30,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="员工状态" style="margin-top: 15px;">
               <el-select v-model="searchForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
@@ -43,7 +43,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="2">
             <el-form-item style="margin-top: 15px;float: right">
               <el-button type="primary" @click="search">
                 <el-icon style="vertical-align: middle">
@@ -53,7 +53,7 @@
               </el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="2">
             <el-form-item style="margin-top: 15px;float: right">
               <el-button type="primary" @click="addEmployeeDialogFormVisible=true">
                 <el-icon style="vertical-align: middle">
@@ -76,18 +76,24 @@
         <el-table-column prop="employee_age" label="年龄"/>
         <el-table-column prop="department_id" label="部门名称"/>
         <el-table-column prop="position" label="职务"/>
-        <el-table-column prop="address" label="办公地址"/>
+        <el-table-column prop="address" label="办公地址" show-overflow-tooltip="true"/>
         <el-table-column prop="phone" label="电话">
-          <!--          <template #default="scope">-->
-          <!--            <span>{{ phoneFilter(scope.row.phone) }}</span>-->
-          <!--          </template>-->
+          <template v-slot="props">
+            {{ props.row.phone ? props.row.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1****$3") : "" }}
+            <el-tooltip
+                class="box-item"
+                effect="customized"
+                content="点击复制电话"
+                placement="top-start">
+              <el-icon @click="copyPhone(props.row)">
+                <document-copy/>
+              </el-icon>
+            </el-tooltip>
+          </template>
 
         </el-table-column>
 
-
         <el-table-column prop="employee_state" label="员工状态"/>
-        <el-table-column prop="ctime" label="创建时间"/>
-        <el-table-column prop="mtime" label="修改时间"/>
         <el-table-column label="操作" fixed="right" width="110">
           <template v-slot="props">
             <el-button type="primary" plain circle @click="openModifyEmployeeDialog(props.row)">
@@ -113,19 +119,21 @@
         </el-table-column>
       </el-table>
 
+
       <!--分页-->
       <el-pagination
           background
           class="pageInput"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          v-model:currentPage="currentPage"
+          v-model:currentPage="pageNum"
           v-model:page-size="pageSize"
           :page-sizes="[5, 10, 15, 20]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           style="margin-top: 8px;float: right;background-color: #fdfdfe">
       </el-pagination>
+
     </div>
 
     <!--    添加员工-->
@@ -185,7 +193,7 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="addEmployeeDialogFormVisible=false">取消</el-button>
+        <el-button type="danger" plain @click="addEmployeeCancel">取消</el-button>
         <el-button type="primary" @click="addEmployee">添加</el-button>
       </span>
         </template>
@@ -202,34 +210,39 @@
           <el-form-item label="姓名" style="margin-left: 20px" prop="employee_name">
             <el-input v-model="updateEmployeeForm.employee_name" style="width: 220px"/>
           </el-form-item>
-          <el-form-item label="性别" style="margin-left: 20px" prop="employee_sex">
-            <el-input v-model="updateEmployeeForm.employee_sex" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="年龄" style="margin-left: 20px" prop="employee_age">
-            <el-input v-model.number="updateEmployeeForm.employee_age" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="部门" style="margin-left: 20px">
-            <el-input v-model="updateEmployeeForm.department_id" style="width: 220px"/>
-            <el-select v-model="searchForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
-                       @change="search">
+          <el-form-item label="性别" style="margin-left: 20px">
+            <el-select v-model="updateEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择">
               <el-option
-                  v-for="item in stateOptions"
+                  v-for="item in sexOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="岗位" style="margin-left: 20px" prop="position">
+          <el-form-item label="年龄" style="margin-left: 20px">
+            <el-input v-model.number="updateEmployeeForm.employee_age" style="width: 220px"/>
+          </el-form-item>
+          <el-form-item label="部门" style="margin-left: 20px">
+            <el-select v-model="updateEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择"
+                     >
+              <el-option
+                  v-for="item in departmentNameOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="岗位" style="margin-left: 20px" >
             <el-input v-model="updateEmployeeForm.position" style="width: 220px"/>
           </el-form-item>
-          <el-form-item label="地址" style="margin-left: 20px">
+          <el-form-item label="地址" style="margin-left: 20px" >
             <el-input v-model="updateEmployeeForm.address" style="width: 220px"/>
           </el-form-item>
 
           <el-form-item label="员工状态" style="margin-top: 15px;">
-            <el-select v-model="searchForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
-                       @change="search">
+            <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择">
               <el-option
                   v-for="item in stateOptions"
                   :key="item.value"
@@ -241,17 +254,11 @@
           <el-form-item label="电话" style="margin-left: 20px">
             <el-input v-model="updateEmployeeForm.phone" style="width: 220px"/>
           </el-form-item>
-          <el-form-item label="创建时间" style="margin-left: 20px">
-            <el-input v-model="updateEmployeeForm.ctime" style="width: 220px"/>
-          </el-form-item>
-          <el-form-item label="修改时间" style="margin-left: 20px">
-            <el-input v-model="updateEmployeeForm.mtime" style="width: 220px"/>
-          </el-form-item>
 
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="updateEmployeeDialogFormVisible = false">取消</el-button>
+        <el-button type="danger" plain @click="updateEmployeeCancel">取消</el-button>
         <el-button type="primary" @click="modifyEmployee">修改</el-button>
       </span>
         </template>
@@ -263,52 +270,20 @@
 </template>
 
 <script>
+
 export default {
   name: "EmployeeInfo",
 
-  filters: {
-    phoneFilter(val) {
-      let reg = /^(.{3}).*(.{4})$/;
-      return val.replace(reg, '$1****$2')
-    }
-  },
   data() {
     return {
       pageNum: 1,
-      pageSize: 100,
+      // currentPage:1,
+      pageSize: 5,
+      total:1,
       addEmployeeDialogFormVisible: false,
       updateEmployeeDialogFormVisible: false,
       departmentNameOptions: [],
-      tableData: [
-        {
-          id: 1,
-          employee_num: '员工编号',
-          employee_name: '名字',
-          employee_sex: '性别',
-          employee_age: '年龄',
-          department_id: '部门编号',
-          position: '职务',
-          address: '地址',
-          phone: 17636856685,
-          employee_state: '员工状态',
-          ctime: '创建时间',
-          mtime: '修改时间'
-        }, {
-          id: 1,
-          employee_num: '员工编号',
-          employee_name: '名字',
-          employee_sex: '性别',
-          employee_age: '年龄',
-          department_id: '部门编号',
-          position: '职务',
-          address: '地址',
-          phone: 15896258636,
-          employee_state: '员工状态',
-          ctime: '创建时间',
-          mtime: '修改时间'
-
-        }
-      ],
+      tableData: [],
       addEmployeeForm: {
         employee_num: '',
         employee_name: '',
@@ -321,6 +296,7 @@ export default {
         employee_state: '',
       },
       updateEmployeeForm: {
+        id:'',
         employee_num: '',
         employee_name: '',
         employee_sex: '',
@@ -341,15 +317,18 @@ export default {
       },
       stateOptions: [{
         label: '在职',
-        value: 0,
+        value: '在职',
       }, {
         label: '离职',
-        value: 1,
+        value: '离职',
+      }, {
+        label: '休假',
+        value: '休假',
       }
       ],
       sexOptions: [{
         label: '男',
-        value: '女',
+        value: '男',
       }, {
         label: '女',
         value: '女',
@@ -376,6 +355,25 @@ export default {
           }
         ]
       },
+      updateEmployeeRules: {
+        employee_num: [
+          {required: true, message: '员工编号不能为空', trigger: 'change'},
+          {required: true, type: 'number', message: '编号必须为数字', trigger: 'change'}
+        ],
+        employee_name: [
+          {required: true, message: '员工姓名不能为空', trigger: 'change'},
+        ],
+        employee_age: [
+          {required: true, message: '员工年龄不能为空', trigger: 'change'},
+          {required: true, type: 'number', message: '编号必须为数字', trigger: 'change'}
+        ],
+        phone: [
+          {
+            pattern: /^1(3[0-9]|5[0-3,5-9]|7[1-3,5-8]|8[0-9])\d{8}$/,
+            message: '请输入正确的电话格式',
+            trigger: 'blur'
+          }]
+      }
     }
   },
   updateEmployeeRules: {
@@ -393,36 +391,84 @@ export default {
     this.search();
   },
   methods: {
-    openModifyEmployeeDialog() {
+    // 复制电话号码
+    copyPhone(row) {
+      let input = document.createElement('input')
+      input.value = row.phone;
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      this.$message.success('复制成功')
+      document.body.removeChild(input);
+    },
+    // 修改员工信息
+    openModifyEmployeeDialog(row) {
       this.updateEmployeeDialogFormVisible = true;
+      console.log(row);
+      this.updateEmployeeForm.id=row.id;
+      this.updateEmployeeForm.department_id=row.department_id;
+      this.updateEmployeeForm.employee_name=row.employee_name;
+      this.updateEmployeeForm.employee_age=row.employee_age;
+      this.updateEmployeeForm.employee_num=row.employee_num;
+      this.updateEmployeeForm.employee_sex=row.employee_sex;
+      this.updateEmployeeForm.position=row.position;
+      this.updateEmployeeForm.employee_state=row.employee_state;
+      this.updateEmployeeForm.address=row.address;
+      this.updateEmployeeForm.phone=row.phone;
+    },
+    // 确认修改
+    modifyEmployee(){
+      let params={
+        id:this.updateEmployeeForm.id,
+        department_id:this.updateEmployeeForm.department_id,
+        employee_name:this.updateEmployeeForm.employee_name,
+        employee_age:this.updateEmployeeForm.employee_age,
+        employee_num:this.updateEmployeeForm.employee_num,
+        employee_sex:this.updateEmployeeForm.employee_sex,
+        position:this.updateEmployeeForm.position,
+        employee_state:this.updateEmployeeForm.employee_state,
+        address:this.updateEmployeeForm.address,
+        phone:this.updateEmployeeForm.phone
+      }
+      this.$http.put('api/employee/update_employee', params).then(resp => {
+        let apiDate = resp.data;
+        console.log(apiDate);
+        if (apiDate.code === 0) {
+          this.$message.success("修改成功")
+          this.updateEmployeeDialogFormVisible = false;
+          this.$refs.updateEmployeeFromRef.resetFields();
+          this.search();
+        }
+      })
+    },
+    updateEmployeeCancel(){
+      this.updateEmployeeDialogFormVisible=false;
+      this.$refs.updateEmployeeFromRef.resetFields();
     },
     // 查询用户
     search() {
       let params = {
         page_size: this.pageSize,
         page_num: this.pageNum,
-        // position: this.searchForm.position,
-        // employee_name: this.searchForm.employee_name,
-        // employee_num: this.searchForm.employee_num,
-        // employee_state: this.searchForm.employee_state
       };
       if (this.searchForm.position !== '') {
         params['position'] = this.searchForm.position;
       }
       if (this.searchForm.employee_name !== '') {
-        params['employee_name']=this.searchForm.employee_name;
+        params['employee_name'] = this.searchForm.employee_name;
       }
-      if (this.searchForm.employee_num!=='') {
-        params['employee_num']=this.searchForm.employee_num;
+      if (this.searchForm.employee_num !== '') {
+        params['employee_num'] = this.searchForm.employee_num;
       }
-      if (this.searchForm.employee_state!=='') {
-        params['employee_state']=this.searchForm.employee_state;
+      if (this.searchForm.employee_state !== '') {
+        params['employee_state'] = this.searchForm.employee_state;
       }
-
+      console.log('555');
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
-        // console.log(apiData);
-        this.tableData=apiData.data;
+        console.log(apiData);
+        this.tableData = apiData.data;
+        this.total=apiData.total;
       })
 
     },
@@ -438,18 +484,23 @@ export default {
         address: this.addEmployeeForm.address,
         department_id: this.addEmployeeForm.department_id,
         employee_num: this.addEmployeeForm.employee_num
+      };
 
-      }
       this.$http.post('api/employee/save_employee', params).then(resp => {
         let apiDate = resp.data;
         console.log(apiDate);
         if (apiDate.code === 0) {
           this.$message.success("添加成功")
           this.addEmployeeDialogFormVisible = false;
+          this.addEmployeeForm=[];
+          this.$refs.addEmployeeFromRef.resetFields();
           this.search();
         }
-
       })
+    },
+    addEmployeeCancel(){
+      this.addEmployeeDialogFormVisible=false;
+      this.$refs.addEmployeeFromRef.resetFields();
     },
     // 获取部门编号和部门名称的选项
     listDepartmentOptions() {
@@ -470,14 +521,14 @@ export default {
     },
 
     // 删除用户
-    deleteEmployee(row){
+    deleteEmployee(row) {
       console.log(row)
       let params = {
         id: row.id,
       };
       this.$http.delete('/api/employee/delete_employee', {data: params}).then(resp => {
         console.log(resp);
-        let apiData=resp.data;
+        let apiData = resp.data;
         if (apiData.code === 0) {
           this.$message.success("删除成功");
           this.search();
@@ -490,7 +541,7 @@ export default {
   handleSizeChange(val) {
     this.search();
     this.pageSize = val;
-},
+  },
   handleCurrentChange(val) {
     this.search();
     this.pageNum = val;
