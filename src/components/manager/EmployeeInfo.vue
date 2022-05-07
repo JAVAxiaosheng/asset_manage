@@ -153,7 +153,13 @@
 
     <!-- 添加员工-->
     <div>
-      <el-dialog v-model="addEmployeeDialogFormVisible" title="添加员工" width="55%">
+      <el-dialog
+          v-model="addEmployeeDialogFormVisible"
+          title="添 加 员 工"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="false"
+          width="55%">
         <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="addEmployeeFromRef">
           <el-row>
             <el-col :span="12">
@@ -171,8 +177,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别" style="margin-left: 20px">
-                <el-select v-model="addEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择"
-                           @change="search">
+                <el-select v-model="addEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择">
                   <el-option
                       v-for="item in sexOptions"
                       :key="item.value"
@@ -212,8 +217,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工状态" style="margin-top: 15px;">
-                <el-select v-model="addEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
-                           @change="search">
+                <el-select v-model="addEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择">
                   <el-option
                       v-for="item in stateOptions"
                       :key="item.value"
@@ -240,8 +244,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="addEmployeeCancel">取消</el-button>
-        <el-button type="primary" @click="addEmployee">添加</el-button>
+        <el-button type="warning" plain @click="addEmployeeCancel">取消</el-button>
+        <el-button type="success" @click="addEmployee">添加</el-button>
       </span>
         </template>
       </el-dialog>
@@ -249,7 +253,13 @@
 
     <!-- 修改员工信息 -->
     <div>
-      <el-dialog v-model="updateEmployeeDialogFormVisible" title="员工信息修改" width="55%">
+      <el-dialog
+          v-model="updateEmployeeDialogFormVisible"
+          title="员 工 信 息 修 改"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="false"
+          width="55%">
         <el-form :model="updateEmployeeForm" :rules="updateEmployeeRules" ref="updateEmployeeFromRef">
           <el-row>
             <el-col :span="12">
@@ -267,8 +277,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别" style="margin-left: 20px">
-                <el-select v-model="updateEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择"
-                           @change="search">
+                <el-select v-model="updateEmployeeForm.employee_sex" class="m-2" clearable filterable placeholder="请选择">
                   <el-option
                       v-for="item in sexOptions"
                       :key="item.value"
@@ -310,8 +319,7 @@
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工状态" style="margin-top: 15px;">
                 <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable
-                           placeholder="请选择"
-                           @change="search">
+                           placeholder="请选择">
                   <el-option
                       v-for="item in stateOptions"
                       :key="item.value"
@@ -338,8 +346,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="updateEmployeeCancel">取消</el-button>
-        <el-button type="primary" @click="modifyEmployee">修改</el-button>
+        <el-button type="warning" plain @click="updateEmployeeCancel">取消</el-button>
+        <el-button type="success" @click="modifyEmployee">修改</el-button>
       </span>
         </template>
       </el-dialog>

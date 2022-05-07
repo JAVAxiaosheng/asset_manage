@@ -115,7 +115,12 @@
 
     <!--    添加部门-->
     <div>
-      <el-dialog v-model="addDialogFormVisible" title="部门添加">
+      <el-dialog
+          v-model="addDialogFormVisible"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="false"
+          title="添 加 部 门">
         <el-form :model="addForm" :rules="addDepartmentRules" ref="addDepartmentFromRef">
           <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
             <el-input v-model.number="addForm.departmentId" style="width: 220px" @change="addDepartmentIdChange"/>
@@ -135,7 +140,12 @@
 
     <!-- 修改部门信息 -->
     <div>
-      <el-dialog v-model="dialogFormVisible" title="部门修改">
+      <el-dialog
+          v-model="dialogFormVisible"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="false"
+          title="部 门 修 改">
         <el-form :model="form" :rules="rules" ref="departmentFromRef">
           <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
             <el-input disabled v-model.number="form.departmentId" style="width: 220px" @change="departmentIdChange"/>

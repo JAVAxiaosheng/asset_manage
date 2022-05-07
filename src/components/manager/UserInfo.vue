@@ -97,7 +97,12 @@
 
     <!--    修改权限-->
     <div>
-      <el-dialog v-model="dialogFormVisible" title="权限修改">
+      <el-dialog
+          v-model="dialogFormVisible"
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+          :show-close="false"
+          title="权 限 修 改">
         <el-form :model="form">
           <el-form-item label="用户名" style="margin-left: 20px">
             <el-input v-model="form.username" :disabled="true" style="width: 220px"/>
