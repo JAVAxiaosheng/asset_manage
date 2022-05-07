@@ -30,7 +30,7 @@
           <span>员工管理</span>
         </template>
         <el-menu-item index="employee_info">员工信息</el-menu-item>
-        <el-menu-item index="1-2">修改信息</el-menu-item>
+        <el-menu-item index="change_myself_info">修改信息</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="2">
