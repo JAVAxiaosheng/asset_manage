@@ -9,40 +9,28 @@
       <el-form ref="registerFormRef" :model="registerForm" :rules="registerFormRules" class="register_form">
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>
+          <el-input v-model="registerForm.username" placeholder="请输入用户名" @change="usernameCheck"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
           <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
-        <!-- 确认密码 -->
-<!--        <el-form-item prop="confirmPassword">-->
-<!--          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请确定密码"></el-input>-->
-<!--        </el-form-item>-->
-        <!-- 身份选择 -->
-<!--        <el-form-item style="margin-left: 20px">-->
-<!--          <el-select  v-model="registerForm.role" class="m-2" filterable-->
-<!--                     placeholder="选择身份">-->
-<!--            <el-option-->
-<!--                v-for="item in roleOptions"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value"-->
-<!--            />-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-        <!-- 按钮区域 -->
-        <el-form-item class="btns">
-          <el-button type="primary" @click="register">注册</el-button>
-          <el-button type="info" @click="resetRegisterForm">重置</el-button>
+        <el-form-item prop="confirmPassword">
+          <el-input @change="confirmPasswordCheck" v-model="registerForm.confirmPassword" type="password"
+                    placeholder="再次确认密码"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button style="margin-left: 95px" type="primary" @click="register">注册</el-button>
+        </el-form-item>
+        <el-link type="danger" @click="resetRegisterForm">返回登录</el-link>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-// import Cookies from 'js-cookie'
+
+import {ElMessageBox} from "element-plus";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -54,7 +42,7 @@ export default {
         username: '',
         password: '',
         confirmPassword: '',
-        role:0
+        role: 0
       },
       roleOptions: [{
         label: '管理员',
@@ -67,14 +55,14 @@ export default {
       registerFormRules: {
         // 验证用户名是否合法
         username: [
-          {required: true, message: '请输入注册名称', trigger: 'blur'}
+          {required: true, message: '请输入用户名', trigger: 'blur'}
         ],
         // 验证密码是否合法
         password: [
-          {required: true, message: '请输入注册密码', trigger: 'blur'}
+          {required: true, message: '请输入密码', trigger: 'blur'}
         ],
         confirmPassword: [
-          {required: true, message: '请确定密码', trigger: 'blur'}
+          {required: true, message: '请再次输入密码', trigger: 'blur'}
         ]
       }
     };
@@ -82,21 +70,50 @@ export default {
   mounted() {
   },
   methods: {
+    confirmPasswordCheck() {
+      if (this.registerForm.password.trim() !== this.registerForm.confirmPassword.trim()) {
+        ElMessageBox.alert('密码输入不一致，请重新输入!', '错误', {
+          confirmButtonText: 'OK',
+          callback: () => {
+            this.$refs["registerFormRef"].resetFields(['password']);
+            this.$refs["registerFormRef"].resetFields(['confirmPassword']);
+          }
+        });
+      }
+    },
+    usernameCheck() {
+      if (this.registerForm.username !== '') {
+        let params = {
+          user_name: this.registerForm.username.trim()
+        };
+        this.$http.post('/api/user_info/check_user', params).then(resp => {
+          let apiData = resp.data
+          if (apiData.code !== 0) {
+            ElMessageBox.alert(apiData.message, '错误', {
+              confirmButtonText: '知道了',
+              callback: () => {
+                this.$refs["registerFormRef"].resetFields(['username']);
+              }
+            });
+          }
+        });
+      }
+    },
     register() {
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) return;
         let params = {
-          userName: this.registerForm.username,
-          password: this.registerForm.password,
-          role:this.registerForm.role
+          userName: this.registerForm.username.trim(),
+          password: this.registerForm.password.trim(),
+          role: this.registerForm.role
         };
         this.$http.post('api/user_info/save_user', params).then(resp => {
-          if(resp.data.code===0){
+          if (resp.data.code === 0) {
             this.$message.success("注册成功，请登录");
             this.$router.push({
-              path:'/'
+              path: '/'
             })
-          }else {
+          } else {
             this.$message.error("该用户已存在，请勿重复注册");
           }
         });
@@ -106,6 +123,9 @@ export default {
     // 点击重置按钮，重置注册表单
     resetRegisterForm() {
       this.$refs.registerFormRef.resetFields()
+      this.$router.push({
+        path: '/'
+      });
     }
   }
 }
@@ -121,7 +141,7 @@ export default {
 .register_box {
   width: 300px;
   height: 350px;
-  background-color: rgba(111,111,111,.2);
+  background-color: rgba(111, 111, 111, .2);
   position: absolute;
   left: 70%;
   top: 50%;
