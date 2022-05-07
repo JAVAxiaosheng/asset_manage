@@ -62,7 +62,7 @@
 
     <div style="margin-top: 10px">
       <!-- 列表展示 -->
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" border stripe style="width: 100%">
         <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
           <template v-slot="props">
             <el-tag type="info">{{ props.row.employee_num }}</el-tag>

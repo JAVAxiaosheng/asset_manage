@@ -47,7 +47,7 @@
 
     <!-- 列表展示 -->
     <div style="margin-top: 10px">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" border stripe style="width: 100%">
         <el-table-column prop="id" label="ID"/>
         <el-table-column prop="userName" label="用户名"/>
         <el-table-column prop="role" label="身份">

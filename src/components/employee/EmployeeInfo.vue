@@ -1,7 +1,7 @@
 <template>
   <div>
 
-<!--    搜索-->
+    <!--    搜索-->
     <div style="background-color: #fdfdfe;margin-bottom: 15px">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
 
@@ -16,7 +16,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="部门名称" style="margin-top: 15px;margin-left: -50px">
-              <el-select v-model="searchForm.department_id" class="m-2"  clearable filterable placeholder="请选择"
+              <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
                 <el-option
                     v-for="item in departmentNameOptions"
@@ -42,8 +42,8 @@
         </el-row>
       </el-form>
     </div>
-<!--    列表展示-->
-    <el-table :data="tableData" stripe style="width: 100%">
+    <!--    列表展示-->
+    <el-table :data="tableData" border stripe style="width: 100%">
       <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
         <template v-slot="props">
           <el-tag type="info">{{ props.row.employee_num }}</el-tag>
@@ -118,7 +118,7 @@ export default {
       total: 0,
       searchForm: {
         employee_name: '',
-        department_id:'',
+        department_id: '',
       },
       departmentNameOptions: [],
     };
