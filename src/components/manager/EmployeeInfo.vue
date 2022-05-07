@@ -62,7 +62,7 @@
 
     <div style="margin-top: 10px">
       <!-- 列表展示 -->
-      <el-table :data="tableData" border stripe style="width: 100%">
+      <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
         <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
           <template v-slot="props">
             <el-tag type="info">{{ props.row.employee_num }}</el-tag>
@@ -354,6 +354,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       pageNum: 1,
       pageSize: 10,
       total: 1,
@@ -532,6 +533,7 @@ export default {
     },
     // 查询用户
     search() {
+      this.loading = true;
       let params = {
         page_size: this.pageSize,
         page_num: this.pageNum,
@@ -551,11 +553,15 @@ export default {
       // console.log('555');
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
-        console.log(apiData);
-        this.tableData = apiData.data;
-        this.total = apiData.total;
+        if (apiData.code === 0) {
+          this.tableData = apiData.data;
+          this.total = apiData.total;
+          this.loading = false;
+        } else {
+          this.$message.error("查询列表接口错误");
+          this.loading = false;
+        }
       })
-
     },
     // 添加员工
     addEmployee() {
