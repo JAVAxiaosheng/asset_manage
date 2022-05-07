@@ -254,7 +254,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="员工编号" style="margin-left: 20px" prop="employee_num">
-                <el-input v-model.number="updateEmployeeForm.employee_num" style="width: 220px"/>
+                <el-input disabled v-model.number="updateEmployeeForm.employee_num" style="width: 220px"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -289,7 +289,8 @@
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门" style="margin-left: 20px"
                             prop="department_id">
-                <el-select v-model="updateEmployeeForm.department_id" class="m-2" clearable filterable placeholder="请选择">
+                <el-select v-model="updateEmployeeForm.department_id" class="m-2" clearable filterable
+                           placeholder="请选择">
                   <el-option
                       v-for="item in departmentNameOptions"
                       :key="item.value"
@@ -308,7 +309,8 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工状态" style="margin-top: 15px;">
-                <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable placeholder="请选择"
+                <el-select v-model="updateEmployeeForm.employee_state" class="m-2" clearable filterable
+                           placeholder="请选择"
                            @change="search">
                   <el-option
                       v-for="item in stateOptions"

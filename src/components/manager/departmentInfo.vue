@@ -138,7 +138,7 @@
       <el-dialog v-model="dialogFormVisible" title="部门修改">
         <el-form :model="form" :rules="rules" ref="departmentFromRef">
           <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
-            <el-input v-model.number="form.departmentId" style="width: 220px" @change="departmentIdChange"/>
+            <el-input disabled v-model.number="form.departmentId" style="width: 220px" @change="departmentIdChange"/>
           </el-form-item>
           <el-form-item label="部门名称" style="margin-left: 20px" prop="departmentName">
             <el-input v-model="form.departmentName" @change="departmentNameChange" style="width: 220px"/>
@@ -166,7 +166,7 @@ export default {
       beforeModifyDepartmentId: '',
       beforeModifyDepartmentName: '',
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 0,
       tableData: [],
       departmentIdOptions: [],
