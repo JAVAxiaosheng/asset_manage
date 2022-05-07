@@ -6,7 +6,8 @@
         class="el-menu-vertical-demo"
         default-active="2"
         text-color="#fff"
-        router="true"
+        :router="true"
+        :unique-opened="true"
         @open="handleOpen"
         @close="handleClose"
     >
