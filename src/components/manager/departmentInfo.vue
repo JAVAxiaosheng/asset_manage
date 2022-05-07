@@ -120,6 +120,7 @@
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
+          width="40%"
           title="添 加 部 门">
         <el-form :model="addForm" :rules="addDepartmentRules" ref="addDepartmentFromRef">
           <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
@@ -131,8 +132,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="cancel">取消</el-button>
-        <el-button type="primary" @click="addDepartment">添加</el-button>
+        <el-button type="warning" plain @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="addDepartment">添 加</el-button>
       </span>
         </template>
       </el-dialog>
@@ -145,6 +146,7 @@
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
+          width="40%"
           title="部 门 修 改">
         <el-form :model="form" :rules="rules" ref="departmentFromRef">
           <el-form-item label="部门编号" style="margin-left: 20px" prop="departmentId">
@@ -156,8 +158,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="danger" plain @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="modifyDepartment">修改</el-button>
+        <el-button type="warning" plain @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="success" @click="modifyDepartment">修 改</el-button>
       </span>
         </template>
       </el-dialog>

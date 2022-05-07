@@ -102,6 +102,7 @@
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
+          width="40%"
           title="权 限 修 改">
         <el-form :model="form">
           <el-form-item label="用户名" style="margin-left: 20px">
@@ -121,8 +122,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="modifyRole">确定</el-button>
+        <el-button type="warning" plain @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="success" @click="modifyRole">修 改</el-button>
       </span>
         </template>
       </el-dialog>

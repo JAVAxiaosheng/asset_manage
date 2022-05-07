@@ -159,7 +159,7 @@
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
-          width="55%">
+          width="52%">
         <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="addEmployeeFromRef">
           <el-row>
             <el-col :span="12">
@@ -244,8 +244,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="warning" plain @click="addEmployeeCancel">取消</el-button>
-        <el-button type="success" @click="addEmployee">添加</el-button>
+        <el-button type="warning" plain @click="addEmployeeCancel">取 消</el-button>
+        <el-button type="success" @click="addEmployee">添 加</el-button>
       </span>
         </template>
       </el-dialog>
@@ -259,7 +259,7 @@
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
-          width="55%">
+          width="52%">
         <el-form :model="updateEmployeeForm" :rules="updateEmployeeRules" ref="updateEmployeeFromRef">
           <el-row>
             <el-col :span="12">
@@ -346,8 +346,8 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button type="warning" plain @click="updateEmployeeCancel">取消</el-button>
-        <el-button type="success" @click="modifyEmployee">修改</el-button>
+        <el-button type="warning" plain @click="updateEmployeeCancel">取 消</el-button>
+        <el-button type="success" @click="modifyEmployee">修 改</el-button>
       </span>
         </template>
       </el-dialog>
