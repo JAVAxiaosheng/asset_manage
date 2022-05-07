@@ -1,7 +1,50 @@
 <template>
   <div>
+
+<!--    搜索-->
+    <div style="background-color: #fdfdfe">
+      <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+
+        <el-row :gutter="20">
+          <el-col :span="4">
+
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="姓名" style="margin-top: 15px">
+              <el-input v-model="searchForm.employee_name" @change="search"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="部门名称" style="margin-top: 15px">
+              <el-select v-model="searchForm.department_id" class="m-2" clearable filterable placeholder="请选择"
+                         @change="search">
+                <el-option
+                    v-for="item in departmentNameOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+          </el-col>
+          <el-col :span="2">
+            <el-form-item style="margin-top: 15px;float: right">
+              <el-button type="primary" @click="search">
+                <el-icon style="vertical-align: middle">
+                  <search/>
+                </el-icon>
+                <span style="vertical-align: middle">查询</span>
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+<!--    列表展示-->
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="employee_num" label="员工编号" min-width="100px">
+      <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
         <template v-slot="props">
           <el-tag type="info">{{ props.row.employee_num }}</el-tag>
         </template>
@@ -33,8 +76,8 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column prop="address" label="地址" width="100px"/>
-      <el-table-column prop="employee_state" label="状态" min-width="80px">
+      <el-table-column prop="address" label="地址" width="100px" show-overflow-tooltip="true"/>
+      <el-table-column prop="employee_state" label="状态" min-width="80px" fixed="right">
         <template v-slot="props">
           <el-tag type="success" v-if="props.row.employee_state === '在职'">
             {{ props.row.employee_state }}
@@ -56,7 +99,7 @@
         @current-change="handleCurrentChange"
         v-model:currentPage="pageNum"
         v-model:page-size="pageSize"
-        :page-sizes="[10, 15, 20, 50]"
+        :page-sizes="[5,10, 15, 20, 50]"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         style="margin-top: 8px;float: right;background-color: #fdfdfe">
@@ -73,12 +116,35 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
+      searchForm: {
+        employee_name: '',
+        department_id:'',
+      },
+      departmentNameOptions: [],
     };
   },
   mounted() {
+    this.listDepartmentOptions();
     this.listEmployee();
   },
   methods: {
+    // 获取部门编号和部门名称的选项
+    listDepartmentOptions() {
+      let params = {
+        page_num: 1,
+        page_size: 100,
+      };
+      this.$http.get('api/department/query_department', {params}).then(resp => {
+        let apiData = resp.data;
+        console.log(apiData);
+        for (let i = 0; i < apiData.data.length; i++) {
+          this.departmentNameOptions.push({
+            label: apiData.data[i].departmentName,
+            value: apiData.data[i].departmentId
+          });
+        }
+      });
+    },
     // 复制电话号码
     copyPhone(row) {
       let input = document.createElement('input')
@@ -95,6 +161,12 @@ export default {
         page_num: this.pageNum,
         page_size: this.pageSize
       };
+      if (this.searchForm.department_id !== '') {
+        params['department_id'] = this.searchForm.department_id;
+      }
+      if (this.searchForm.employee_name !== '') {
+        params['employee_name'] = this.searchForm.employee_name;
+      }
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {

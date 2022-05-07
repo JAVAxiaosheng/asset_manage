@@ -2,8 +2,6 @@
   <div>
 
     <div style="background-color: #fdfdfe">
-
-
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
 
         <el-row :gutter="20">
@@ -312,8 +310,8 @@ export default {
       searchForm: {
         employee_num: '',
         employee_name: '',
-        position: '',
-        employee_state: ''
+        employee_state: '',
+        department_id:''
       },
       stateOptions: [{
         label: '在职',
@@ -451,8 +449,8 @@ export default {
         page_size: this.pageSize,
         page_num: this.pageNum,
       };
-      if (this.searchForm.position !== '') {
-        params['position'] = this.searchForm.position;
+      if (this.searchForm.department_id !== '') {
+        params['department_id'] = this.searchForm.department_id;
       }
       if (this.searchForm.employee_name !== '') {
         params['employee_name'] = this.searchForm.employee_name;
@@ -463,7 +461,7 @@ export default {
       if (this.searchForm.employee_state !== '') {
         params['employee_state'] = this.searchForm.employee_state;
       }
-      console.log('555');
+      // console.log('555');
       this.$http.get('api/employee/query_employee', {params}).then(resp => {
         let apiData = resp.data;
         console.log(apiData);
