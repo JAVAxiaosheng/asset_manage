@@ -18,7 +18,7 @@
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="info" @click="Register">注册</el-button>
+          <el-button type="warning" @click="Register">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -43,11 +43,11 @@ export default {
       loginFormRules: {
         // 验证用户名是否合法
         username: [
-          {required: true, message: '请输入登录名称', trigger: 'blur'}
+          {required: true, message: '用户名不能为空', trigger: 'change'}
         ],
         // 验证密码是否合法
         password: [
-          {required: true, message: '请输入登录密码', trigger: 'blur'}
+          {required: true, message: '密码不能为空', trigger: 'change'}
         ]
       }
     };
@@ -59,8 +59,8 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;
         let params = {
-          userName: this.loginForm.username,
-          password: this.loginForm.password
+          userName: this.loginForm.username.trim(),
+          password: this.loginForm.password.trim()
         };
         this.$http.post('/api/user_info/login', params).then(resp => {
           let apiData = resp.data
@@ -102,7 +102,7 @@ export default {
 .login_box {
   width: 300px;
   height: 350px;
-  background-color: rgba(111,111,111,.2);
+  background-color: rgba(111, 111, 111, .2);
   position: absolute;
   left: 70%;
   top: 50%;
