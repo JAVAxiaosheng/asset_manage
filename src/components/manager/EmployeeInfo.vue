@@ -204,7 +204,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;岗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
+              <el-form-item label="&nbsp;&nbsp;职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
                 <el-input v-model="addEmployeeForm.position" style="width: 220px"/>
               </el-form-item>
             </el-col>
@@ -301,7 +301,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;岗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
+              <el-form-item label="&nbsp;&nbsp;职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位" style="margin-left: 20px">
                 <el-input v-model="updateEmployeeForm.position" style="width: 220px"/>
               </el-form-item>
             </el-col>
