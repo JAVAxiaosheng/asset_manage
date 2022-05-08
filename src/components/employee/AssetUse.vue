@@ -44,9 +44,11 @@
       </el-table-column>
       <el-table-column align="center" prop="property_type" label="资产类别" min-width="90px"/>
       <el-table-column align="center" label="操作" width="150px">
-        <el-button type="success" plain>
-          借用
-        </el-button>
+        <template v-slot="props">
+          <el-button type="success" plain @click="propertyUse(props.row)">
+            借用
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -67,6 +69,8 @@
 
 <script>
 import moment from "moment";
+import {ElMessageBox} from "element-plus";
+import Cookies from 'js-cookie'
 
 export default {
   name: "AssetUse",
@@ -80,10 +84,12 @@ export default {
       searchForm: {
         propertyName: ''
       },
+      employeeNum: '',
     };
   },
   mounted() {
     this.listPropertyInfo();
+    this.getEmployeeNum();
   },
   methods: {
     formatDate(time) {
@@ -123,6 +129,46 @@ export default {
         } else {
           this.$message.error("查询列表接口错误");
           this.loading = false;
+        }
+      });
+    },
+    propertyUse(row) {
+      ElMessageBox.confirm(
+          '确定要借用该资产么?',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(() => {
+        let params = {
+          property_num: row.property_num,
+          employee_num: this.employeeNum,
+          out_time: parseInt((new Date().getTime() / 1000).toString()),
+          inout_state: 2
+        };
+        this.$http.post('api/inout_record/save_inout_record', params).then(resp => {
+          let apiData = resp.data;
+          if (apiData.code === 0) {
+            this.$message.success("借用成功,请爱惜使用");
+            this.listPropertyInfo();
+          } else {
+            this.$message.error("接口错误，借用失败")
+          }
+        });
+      }).catch(() => {
+      })
+    },
+    getEmployeeNum() {
+      let params = {
+        employee_name: Cookies.get("user_name")
+      };
+      this.$http.get('api/employee/query_employee', {params}).then(resp => {
+        let apiData = resp.data;
+        if (apiData.code === 0) {
+          this.employeeNum = apiData.data[0].employee_num;
+        } else {
+          this.$message.error("查询员工编号接口错误");
         }
       });
     },
