@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="background-color: #fdfdfe">
+    <div style="background-color: #fdfdfe;margin-bottom: 15px">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-row :gutter="20">
           <el-col :span="4" style="margin-left: 20px">
@@ -8,8 +8,8 @@
               <el-input v-model="searchForm.property_name" @change="search"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6" style="margin-left: 20px">
-            <el-form-item label="入库时间" style="margin-top: 15px">
+          <el-col :span="6" >
+            <el-form-item label="入库时间" style="margin-top: 15px;" >
               <el-date-picker @change="search" v-model="searchForm.create_time" type="date"
                               placeholder="请选择时间"/>
             </el-form-item>
@@ -27,7 +27,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <el-form-item label="资产状态" style="margin-top: 15px">
               <el-select v-model="searchForm.property_state" class="m-2" clearable filterable placeholder="请选择"
                          @change="search">
@@ -40,7 +40,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="2">
             <el-form-item style="margin-top: 15px;margin-left:10px;float: right">
               <el-button type="primary" plain round @click="search">
                 <el-icon style="vertical-align: middle">
@@ -63,20 +63,19 @@
         </el-row>
       </el-form>
     </div>
-
     <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
       <el-table-column prop="property_num" label="编号" min-width="100px"/>
       <el-table-column prop="property_model" label="型号" min-width="80px"/>
-      <el-table-column prop="property_name" label="资产名称" min-width="80px"/>
+      <el-table-column prop="property_name" label="资产名称" min-width="100px"/>
       <el-table-column prop="property_price" label="价格" min-width="120px"/>
 
-      <el-table-column prop="property_factory" label="厂家" min-width="150px"/>
-      <el-table-column prop="produce_date" label="生产时间" min-width="150px">
+      <el-table-column prop="property_factory" label="生产厂家" min-width="150px"/>
+      <el-table-column prop="produce_date" label="生产时间" min-width="130px">
         <template v-slot="props">
           <el-tag>{{ formatDate(props.row.produce_date) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="create_date" label="入库时间" min-width="150px" @change="search">
+      <el-table-column prop="create_date" label="入库时间" min-width="130px" @change="search">
         <template v-slot="props">
           <el-tag>{{ formatDate(props.row.create_date) }}</el-tag>
         </template>
@@ -120,10 +119,10 @@
         background
         class="pageInput"
         @size-change="handleSizeChange"
-        @current-change="handleNumChange"
+        @current-change="handleCurrentChange"
         v-model:currentPage="pageNum"
         v-model:page-size="pageSize"
-        :page-sizes="[5, 10, 15, 20]"
+        :page-sizes="[5, 10, 15, 20, 50]"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         style="margin-top: 8px;float: right;background-color: #fdfdfe">
@@ -146,7 +145,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号" style="margin-left: 20px">
+              <el-form-item label="&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号" style="margin-left: 20px">
                 <el-input v-model="addPropertyForm.property_model" style="width: 220px"/>
               </el-form-item>
             </el-col>
@@ -166,13 +165,13 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家" style="margin-left: 20px"
+              <el-form-item label="&nbsp;&nbsp;生产厂家" style="margin-left: 20px;"
                             prop="department_id">
                 <el-input v-model.number="addPropertyForm.property_factory" style="width: 220px"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="生产时间" style="margin-top: 15px">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产时间">
                 <el-date-picker @change="propertyTime" v-model="addPropertyForm.produce_time" type="date"
                                 placeholder="请选择时间"/>
               </el-form-item>
@@ -181,9 +180,9 @@
           <el-row>
 
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;购买人"
-                            style="margin-left: 20px;margin-top: 15px">
-                <el-select v-model="addPropertyForm.buyer" class="m-2" clearable filterable placeholder="请选择">
+              <el-form-item label="&nbsp;&nbsp;购&nbsp;&nbsp;买&nbsp;&nbsp;人"
+                            style="margin-left: 20px;">
+                <el-select v-model="addPropertyForm.buyer" class="m-2"  filterable placeholder="请选择">
                   <el-option
                       v-for="item in buyerOptions"
                       :key="item.value"
@@ -194,7 +193,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;资产类型" style="margin-top: 15px;">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产类型">
                 <el-input v-model="addPropertyForm.property_type" style="width: 220px"/>
               </el-form-item>
             </el-col>
@@ -222,12 +221,12 @@
         <el-form :model="updatePropertyForm" :rules="updatePropertyRules" ref="updatePropertyFromRef">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="资产编号" style="margin-left: 20px">
+              <el-form-item label="资产编号" style="margin-left: 20px" prop="property_num">
                 <el-input v-model.number="updatePropertyForm.property_num" style="width: 220px"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号" style="margin-left: 20px">
+              <el-form-item label="&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号" style="margin-left: 20px">
                 <el-input v-model="updatePropertyForm.property_model" style="width: 220px"/>
               </el-form-item>
             </el-col>
@@ -239,27 +238,28 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px">
+              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px"
+                            prop="property_price">
                 <el-input v-model.number="updatePropertyForm.property_price" style="width: 220px"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家" style="margin-left: 20px">
+              <el-form-item label="&nbsp;&nbsp;生产厂家" style="margin-left: 20px">
                 <el-input v-model.number="updatePropertyForm.property_factory" style="width: 220px"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="生产时间" style="margin-top: 15px">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生产时间">
                 <el-date-picker v-model="updatePropertyForm.produce_time" type="date" placeholder="请选择时间"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;资产状态" style="margin-top: 15px;">
-                <el-select v-model="updatePropertyForm.property_state" class="m-2" clearable filterable
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产状态">
+                <el-select v-model="updatePropertyForm.property_state" class="m-2"  filterable
                            placeholder="请选择">
                   <el-option
                       v-for="item in propertyStateOptions"
@@ -271,10 +271,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;购买人"
-                            style="margin-left: 20px;margin-top: 15px">
-                <el-select v-model="updatePropertyForm.buyer" class="m-2" clearable filterable placeholder="请选择"
-                           @change="search">
+              <el-form-item label="&nbsp;&nbsp;购&nbsp;&nbsp;买&nbsp;&nbsp;人"
+                            style="margin-left: 20px;">
+                <el-select v-model="updatePropertyForm.buyer" class="m-2"  filterable placeholder="请选择">
                   <el-option
                       v-for="item in buyerOptions"
                       :key="item.value"
@@ -287,7 +286,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="&nbsp;&nbsp;资产类型" style="margin-top: 15px;">
+              <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产类型">
                 <el-input v-model="updatePropertyForm.property_type" style="width: 220px"/>
               </el-form-item>
             </el-col>
@@ -317,6 +316,7 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 1,
+      loading: false,
       addPropertyDialogFormVisible: false,
       updatePropertyDialogFormVisible: false,
       addPropertyForm: {
@@ -388,7 +388,7 @@ export default {
           property_model: '型号',
           property_name: '资产名称',
           property_price: '价格',
-          property_factory: '厂家',
+          property_factory: '生产厂家',
           produce_time: '生产时间',
           create_time: '入库时间',
           buyer: '购买人',
@@ -399,12 +399,20 @@ export default {
       ],
       addPropertyRules: {
         property_num: [
-          {required: true, type: 'number', message: '价格必须为数字', trigger: 'change'}
+          {required: true, type: 'number', message: '编号必须为数字', trigger: 'change'}
         ],
         property_price: [
           {required: true, type: 'number', message: '价格必须为数字', trigger: 'change'}
         ],
       },
+      updatePropertyRules: {
+        property_num: [
+          {required: true, type: 'number', message: '编号必须为数字', trigger: 'change'}
+        ],
+        property_price: [
+          {required: true, type: 'number', message: '价格必须为数字', trigger: 'change'}
+        ],
+      }
     }
   },
 
@@ -430,14 +438,15 @@ export default {
     },
 
     handleSizeChange(val) {
+      this.search();
       this.pageSize = val;
-      this.search();
     },
-    handleNumChange(val) {
-      this.pageNum = val;
+    handleCurrentChange(val) {
       this.search();
+      this.pageNum = val;
     },
     search() {
+      this.loading = true;
       let params = {
         page_num: this.pageNum,
         page_size: this.pageSize,
@@ -457,12 +466,18 @@ export default {
       this.$http.get('api/property_info/query_property', {params}).then((resp) => {
         let apiData = resp.data;
         // console.log(apiData);
-        if (apiData.code === 0) {
-          this.tableData = apiData.data;
-          this.total = apiData.data.total;
-        } else {
-          this.$message.error("查询列表接口错误")
-        }
+        setTimeout(() => {
+          if (apiData.code === 0) {
+            this.tableData = apiData.data;
+            this.total = apiData.total;
+            this.loading = false;
+          } else {
+
+            this.$message.error("查询列表接口错误");
+            this.loading = false;
+          }
+        }, 500)
+
       })
     },
 
@@ -486,6 +501,7 @@ export default {
     // 取消添加资产信息
     addPropertyCancel() {
       this.addPropertyDialogFormVisible = false;
+      this.$refs['addPropertyFromRef'].resetFields();
     },
     // 添加资产信息
     addProperty() {
@@ -507,6 +523,7 @@ export default {
             if (apiData.code === 0) {
               this.addPropertyDialogFormVisible = false;
               this.search();
+              this.$refs['addPropertyFromRef'].resetFields();
             }
           })
         }
@@ -520,30 +537,44 @@ export default {
     // 打开修改资产信息
     openModifyPropertyDialog(row) {
       console.log(row.produce_time);
+      this.updatePropertyDialogFormVisible = true;
       this.updatePropertyForm = row;
       this.updatePropertyForm.produce_time = this.formatDate(row.produce_date);
-      this.updatePropertyDialogFormVisible = true;
+      this.updatePropertyForm.property_num = Number(row.property_num);
+      if(row.property_state===1){
+        this.updatePropertyForm.property_state="入库"
+      }else if(row.property_state===2){
+        this.updatePropertyForm.property_state="借出"
+      }else {
+        this.updatePropertyForm.property_state="维护"
+      }
+
     },
     // 修改资产信息
     updateProperty() {
-      let params = {
-        id: this.updatePropertyForm.id,
-        buyer: this.updatePropertyForm.buyer,
-        property_name: this.updatePropertyForm.property_name,
-        property_model: this.updatePropertyForm.property_model,
-        property_type: this.updatePropertyForm.property_type,
-        property_price: this.updatePropertyForm.property_price,
-        property_factory: this.updatePropertyForm.property_factory,
-        property_state: this.updatePropertyForm.property_state,
-        produce_date: new Date(this.updatePropertyForm.produce_time).getTime() / 1000,
-        property_num: this.updatePropertyForm.property_num,
-      };
-      this.$http.put('api/property_info/update_property', params).then((resp) => {
-        console.log(resp);
-        let apiData = resp.data;
-        if (apiData.code === 0) {
-          this.updatePropertyDialogFormVisible = false;
-          this.search();
+      this.$refs['updatePropertyFromRef'].validate((valid) => {
+        if (valid) {
+          let params = {
+            id: this.updatePropertyForm.id,
+            buyer: this.updatePropertyForm.buyer,
+            property_name: this.updatePropertyForm.property_name,
+            property_model: this.updatePropertyForm.property_model,
+            property_type: this.updatePropertyForm.property_type,
+            property_price: this.updatePropertyForm.property_price,
+            property_factory: this.updatePropertyForm.property_factory,
+            property_state: this.updatePropertyForm.property_state,
+            produce_date: new Date(this.updatePropertyForm.produce_time).getTime() / 1000,
+            property_num: this.updatePropertyForm.property_num,
+          };
+          this.$http.put('api/property_info/update_property', params).then((resp) => {
+            console.log(resp);
+            let apiData = resp.data;
+            if (apiData.code === 0) {
+              this.updatePropertyDialogFormVisible = false;
+              this.search();
+              this.$refs['updatePropertyFromRef'].resetFields();
+            }
+          })
         }
       })
 
