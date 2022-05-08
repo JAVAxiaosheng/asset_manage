@@ -66,8 +66,16 @@
     <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
       <el-table-column prop="property_num" label="编号" min-width="100px"/>
       <el-table-column prop="property_model" label="型号" min-width="80px"/>
-      <el-table-column prop="property_name" label="资产名称" min-width="100px"/>
-      <el-table-column prop="property_price" label="价格" min-width="120px"/>
+      <el-table-column prop="property_name" label="资产名称" min-width="100px">
+        <template v-slot="props">
+          <el-tag>{{ props.row.property_name }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="property_price" label="价格" min-width="120px">
+        <template v-slot="props">
+          <el-tag type="danger" round>{{ '￥' + formatMoney(props.row.property_price, 2) }}</el-tag>
+        </template>
+      </el-table-column>
 
       <el-table-column prop="property_factory" label="生产厂家" min-width="150px"/>
       <el-table-column prop="produce_date" label="生产时间" min-width="130px">
@@ -425,6 +433,16 @@ export default {
     // 格式化日期
     formatDate(time) {
       return moment(time * 1000).format("YYYY-MM-DD");
+    },
+    formatMoney(s, n) {
+      n = n > 0 && n <= 20 ? n : 2;
+      s = parseFloat((s + "").replace(/[^\d.-]/g, "")).toFixed(n) + "";
+      let l = s.split(".")[0].split("").reverse(), r = s.split(".")[1];
+      let t = "";
+      for (let i = 0; i < l.length; i++) {
+        t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+      }
+      return t.split("").reverse().join("") + "." + r;
     },
     // 改变状态
     formatState(state) {
