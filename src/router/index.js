@@ -15,7 +15,9 @@ import departmentInfo from '@/components/manager/departmentInfo';
 import managerEmployeeInfo from '@/components/manager/EmployeeInfo';
 import EmployeeInfo from '@/components/employee/EmployeeInfo';
 
-import ChangeMyselfInfo from '@/components/employee/ChangeMyselfInfo'
+import ChangeMyselfInfo from '@/components/employee/ChangeMyselfInfo';
+
+import AssetInfo from '@/components/manager/AssetInfo';
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -58,6 +60,11 @@ const router = createRouter({
                     path: '/employee_info',
                     name: "EmployeeInfo",
                     component: EmployeeInfo
+                },
+                {
+                    path: '/asset_info',
+                    name: "AssetInfo",
+                    component: AssetInfo
                 },
                 {
                     path: '/change_myself_info',
