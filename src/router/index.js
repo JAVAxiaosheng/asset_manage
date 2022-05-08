@@ -19,6 +19,8 @@ import ChangeMyselfInfo from '@/components/employee/ChangeMyselfInfo';
 
 import AssetInfo from '@/components/manager/AssetInfo';
 
+import AssetUse from "@/components/employee/AssetUse";
+
 const routerHistory = createWebHistory()
 const router = createRouter({
     history: routerHistory,
@@ -29,9 +31,9 @@ const router = createRouter({
             component: Login,
         },
         {
-         path:"/register",
-         name:"Register",
-         component:Register
+            path: "/register",
+            name: "Register",
+            component: Register
         },
         {
             path: '/LayoutContainer',
@@ -80,6 +82,11 @@ const router = createRouter({
                     path: '/employee-change-password',
                     name: "employeeChangePassword",
                     component: employeeChangePassword
+                },
+                {
+                    path: '/asset-use',
+                    name: "AssetUse",
+                    component: AssetUse
                 },
             ],
         }
