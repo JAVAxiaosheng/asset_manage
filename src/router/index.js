@@ -21,6 +21,8 @@ import AssetInfo from '@/components/manager/AssetInfo';
 
 import AssetUse from "@/components/employee/AssetUse";
 
+import MyAssets from '@/components/employee/MyAssets'
+
 const routerHistory = createWebHistory()
 const router = createRouter({
     history: routerHistory,
@@ -87,6 +89,11 @@ const router = createRouter({
                     path: '/asset-use',
                     name: "AssetUse",
                     component: AssetUse
+                },
+                {
+                    path: '/my_assets',
+                    name: "MyAssets",
+                    component: MyAssets
                 },
             ],
         }

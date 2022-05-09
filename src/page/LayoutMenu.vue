@@ -42,7 +42,7 @@
           <span>资产管理</span>
         </template>
         <el-menu-item index="/asset-use">资产借用</el-menu-item>
-        <el-menu-item index="2-2">资产归还</el-menu-item>
+        <el-menu-item index="/my_assets">我的资产</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="3">

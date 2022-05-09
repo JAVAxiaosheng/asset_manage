@@ -2,7 +2,13 @@
   <div>
     <el-dropdown class="down">
     <span class="el-dropdown-link">
-       用户名：{{ username }}
+      <span v-if="role==0">
+         用户名：
+      </span>
+       <span v-if="role==1">
+         管理员：
+      </span>
+      {{ username }}
       <el-icon class="el-icon--right">
         <arrow-down/>
       </el-icon>
@@ -14,7 +20,7 @@
       </template>
     </el-dropdown>
     <span>
-      <img style="margin-top: 8px;position: fixed;right: 180px" width="40" src="../assets/bilibili_blue.svg"
+      <img style="margin-top: 8px;position: fixed;right: 190px" width="40" src="../assets/bilibili_blue.svg"
            alt="">
     </span>
   </div>
@@ -28,11 +34,13 @@ export default {
   name: "LayoutHeader",
   data() {
     return {
-      username: ''
+      username: '',
+      role:''
     };
   },
   mounted() {
     this.username = Cookies.get('user_name');
+    this.role = Cookies.get('role');
   },
   methods: {
     logout() {
