@@ -3,21 +3,16 @@
     <div style="background-color: #fdfdfe;margin-bottom: 15px">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-row :gutter="20">
-          <el-col :span="4" style="margin-left: 20px">
+          <el-col :span="8" >
             <el-form-item label="资产名称" style="margin-top: 15px">
-              <el-input v-model="searchForm.property_name" @change="search"></el-input>
+              <el-input v-model="searchForm.property_name" @change="search" style="width: 180px" ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6" >
-            <el-form-item label="入库时间" style="margin-top: 15px;" >
-              <el-date-picker @change="search" v-model="searchForm.create_time" type="date"
-                              placeholder="请选择时间"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item label="购买人" style="margin-top: 15px">
+
+          <el-col :span="8">
+            <el-form-item label="&nbsp;&nbsp;&nbsp;购买人" style="margin-top: 15px">
               <el-select v-model="searchForm.buyer" class="m-2" clearable filterable placeholder="请选择"
-                         @change="search">
+                         @change="search" style="width: 180px">
                 <el-option
                     v-for="item in buyerOptions"
                     :key="item.value"
@@ -27,20 +22,8 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="5">
-            <el-form-item label="资产状态" style="margin-top: 15px">
-              <el-select v-model="searchForm.property_state" class="m-2" clearable filterable placeholder="请选择"
-                         @change="search">
-                <el-option
-                    v-for="item in propertyStateOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
+
+          <el-col :span="3">
             <el-form-item style="margin-top: 15px;margin-left:10px;float: right">
               <el-button type="primary" plain round @click="search">
                 <el-icon style="vertical-align: middle">
@@ -50,8 +33,8 @@
               </el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
-            <el-form-item style="margin-top: 15px;float: right">
+          <el-col :span="5">
+            <el-form-item style="margin-top: 15px;float: left">
               <el-button type="success" round @click="addPropertyDialogFormVisible=true">
                 <el-icon style="vertical-align: middle">
                   <plus/>
@@ -59,6 +42,34 @@
                 <span style="vertical-align: middle">添加</span>
               </el-button>
             </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row :gutter="20">
+
+          <el-col :span="8" >
+            <el-form-item label="入库时间"  >
+              <el-date-picker @change="search" v-model="searchForm.create_time" type="date"
+                              placeholder="请选择时间" style="width: 180px"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="资产状态" >
+              <el-select v-model="searchForm.property_state" class="m-2" clearable filterable placeholder="请选择"
+                         @change="search" style="width: 180px">
+                <el-option
+                    v-for="item in propertyStateOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+
           </el-col>
         </el-row>
       </el-form>
