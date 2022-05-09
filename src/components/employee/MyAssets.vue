@@ -4,17 +4,31 @@
     <el-form :inline="true" :model="searchForm" class="demo-form-inline"
              style="background-color: #fdfdfe;margin-bottom: 15px">
 
-      <el-form-item label="资产名称" style="margin-top: 20px">
-        <el-select v-model="searchForm.property_name" class="m-2" clearable filterable placeholder="请选择"
-                   style="width: 200px" @change="listMyRecord">
-          <el-option
-              v-for="item in propertyNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="资产名称" style="margin-top: 20px">
+            <el-select v-model="searchForm.property_name" class="m-2" clearable filterable placeholder="请选择"
+                       style="width: 200px" @change="listMyRecord">
+              <el-option
+                  v-for="item in propertyNameOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="16">
+          <el-form-item style="margin-top: 20px;margin-left: -900px">
+            <el-button type="primary" @click="listMyRecord" round plain>
+              <el-icon style="vertical-align: middle">
+                <search/>
+              </el-icon>
+            </el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
 
     </el-form>
 
