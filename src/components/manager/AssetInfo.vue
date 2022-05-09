@@ -80,7 +80,7 @@
       <el-table-column prop="property_factory" label="生产厂家" min-width="150px"/>
       <el-table-column prop="produce_date" label="生产时间" min-width="130px">
         <template v-slot="props">
-          <el-tag>{{ formatDate(props.row.produce_date) }}</el-tag>
+          <el-tag type="success">{{ formatDate(props.row.produce_date) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="create_date" label="入库时间" min-width="130px" @change="search">
@@ -221,7 +221,7 @@
     <div>
       <el-dialog
           v-model="updatePropertyDialogFormVisible"
-          title="修改 资 产"
+          title="修 改 资 产"
           :close-on-click-modal="false"
           :close-on-press-escape="false"
           :show-close="false"
@@ -230,7 +230,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="资产编号" style="margin-left: 20px" prop="property_num">
-                <el-input v-model.number="updatePropertyForm.property_num" style="width: 220px"/>
+                <el-input v-model.number="updatePropertyForm.property_num" style="width: 220px" disabled/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -246,9 +246,11 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px"
-                            prop="property_price">
+              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px;position: relative"
+                            prop="property_price" >
                 <el-input v-model.number="updatePropertyForm.property_price" style="width: 220px"/>
+                <span style="position: absolute;right: 30px;">元</span>
+
               </el-form-item>
             </el-col>
           </el-row>
@@ -267,7 +269,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产状态">
-                <el-select v-model="updatePropertyForm.property_state" class="m-2"  filterable
+                <el-select v-model="updatePropertyForm.property_state" class="m-2"  filterable disabled
                            placeholder="请选择">
                   <el-option
                       v-for="item in propertyStateOptions"
@@ -358,15 +360,15 @@ export default {
       propertyStateOptions: [
         {
           label: '入库',
-          value: '1'
+          value: 1
         },
         {
           label: '借出',
-          value: '2'
+          value: 2
         },
         {
           label: '维修',
-          value: '3'
+          value: 3
         }
       ],
       buyerOptions: [
@@ -448,7 +450,7 @@ export default {
     formatState(state) {
       if (state === 1) {
         return '入库'
-      } else if (state == 2) {
+      } else if (state === 2) {
         return '借出';
       } else {
         return '维护';
@@ -490,7 +492,6 @@ export default {
             this.total = apiData.total;
             this.loading = false;
           } else {
-
             this.$message.error("查询列表接口错误");
             this.loading = false;
           }
@@ -554,18 +555,17 @@ export default {
     },
     // 打开修改资产信息
     openModifyPropertyDialog(row) {
-      console.log(row.produce_time);
+      // alert(row)
+      // console.log(row.produce_time);
       this.updatePropertyDialogFormVisible = true;
       this.updatePropertyForm = row;
+
       this.updatePropertyForm.produce_time = this.formatDate(row.produce_date);
       this.updatePropertyForm.property_num = Number(row.property_num);
-      if(row.property_state===1){
-        this.updatePropertyForm.property_state="入库"
-      }else if(row.property_state===2){
-        this.updatePropertyForm.property_state="借出"
-      }else {
-        this.updatePropertyForm.property_state="维护"
-      }
+
+
+      // console.log(row.property_state);
+
 
     },
     // 修改资产信息
@@ -585,7 +585,7 @@ export default {
             property_num: this.updatePropertyForm.property_num,
           };
           this.$http.put('api/property_info/update_property', params).then((resp) => {
-            console.log(resp);
+            // console.log(resp);
             let apiData = resp.data;
             if (apiData.code === 0) {
               this.updatePropertyDialogFormVisible = false;
