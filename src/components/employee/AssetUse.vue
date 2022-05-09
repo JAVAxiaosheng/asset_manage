@@ -17,6 +17,10 @@
     </div>
   </div>
 
+  <div style="background-color: #fdfdfe;" align="left">
+    <span style="color: #e18484;font-size: 12px;margin-left: 20px"><b>*注：</b>
+      本界面只展示可借用的资产</span>
+  </div>
   <!-- 表格 -->
   <div>
     <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
@@ -43,9 +47,16 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="property_type" label="资产类别" min-width="90px"/>
+      <el-table-column align="center" prop="property_state" label="资产状态" min-width="85px">
+        <template v-slot="props">
+          <el-tag type="success" v-if="props.row.property_state === 1">入库</el-tag>
+          <el-tag type="warning" v-if="props.row.property_state === 2">借出</el-tag>
+          <el-tag type="danger" v-if="props.row.property_state === 3">维修</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="150px">
         <template v-slot="props">
-          <el-button type="success" plain @click="propertyUse(props.row)">
+          <el-button type="warning" plain @click="propertyUse(props.row)">
             借用
           </el-button>
         </template>
@@ -101,7 +112,7 @@ export default {
       let l = s.split(".")[0].split("").reverse(), r = s.split(".")[1];
       let t = "";
       for (let i = 0; i < l.length; i++) {
-        t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+        t += l[i] + ((i + 1) % 3 === 0 && (i + 1) !== l.length ? "," : "");
       }
       return t.split("").reverse().join("") + "." + r;
     },
