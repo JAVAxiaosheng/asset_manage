@@ -64,7 +64,11 @@
       </el-form>
     </div>
     <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
-      <el-table-column prop="property_num" label="编号" min-width="100px"/>
+      <el-table-column prop="property_num" label="编号" min-width="100px" fixed>
+        <template v-slot="props">
+          <el-tag type="info">{{ props.row.property_num }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="property_model" label="型号" min-width="80px"/>
       <el-table-column prop="property_name" label="资产名称" min-width="100px">
         <template v-slot="props">
@@ -77,7 +81,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="property_factory" label="生产厂家" min-width="150px"/>
+      <el-table-column prop="property_factory" label="生产厂家" min-width="150px" >
+        <template v-slot="props" >
+          <el-tag type="warning">{{ props.row.property_factory }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="produce_date" label="生产时间" min-width="130px">
         <template v-slot="props">
           <el-tag type="success">{{ formatDate(props.row.produce_date) }}</el-tag>
@@ -92,7 +100,16 @@
       <el-table-column prop="property_type" label="资产类型" width="100px"/>
       <el-table-column prop="property_state" label="资产状态" width="100px">
         <template v-slot="props">
-          <el-tag>{{ formatState(props.row.property_state) }}</el-tag>
+          <template v-if="props.row.property_state==1">
+            <el-tag type="success">{{ formatState(props.row.property_state) }}</el-tag>
+          </template>
+          <template v-if="props.row.property_state==2">
+            <el-tag type="primary">{{ formatState(props.row.property_state) }}</el-tag>
+          </template>
+          <template v-if="props.row.property_state==3">
+            <el-tag type="warning">{{ formatState(props.row.property_state) }}</el-tag>
+          </template>
+
         </template>
       </el-table-column>
 
@@ -248,9 +265,11 @@
             <el-col :span="12">
               <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px;position: relative"
                             prop="property_price" >
-                <el-input v-model.number="updatePropertyForm.property_price" style="width: 220px"/>
-                <span style="position: absolute;right: 30px;">元</span>
-
+                <el-input v-model.number="updatePropertyForm.property_price" style="width: 220px">
+                  <template #append>
+                    <el-button :icon="Search" >元</el-button>
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
