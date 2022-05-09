@@ -19,7 +19,7 @@ import ChangeMyselfInfo from '@/components/employee/ChangeMyselfInfo';
 
 import AssetInfo from '@/components/manager/AssetInfo';
 
-import AssetUse from "@/components/employee/AssetUse";
+import AssetUse from "@/components/AssetUse";
 
 import MyAssets from '@/components/employee/MyAssets'
 

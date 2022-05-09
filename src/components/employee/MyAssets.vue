@@ -115,9 +115,12 @@ export default {
     }
   },
   mounted() {
+
     this.getEmployeeNum();
-    this.listMyRecord();
-    this.listPropertyName();
+    setTimeout(()=>{
+      this.listMyRecord();
+      this.listPropertyName();
+    },0)
   },
   methods: {
     // 格式化日期
@@ -192,9 +195,11 @@ export default {
       let params = {
         page_num: this.pageNum,
         page_size: this.pageSize,
-        employee_num: this.employeeNum,
-        property_num:this.searchForm.property_name
+        employee_num: this.employeeNum
       };
+      if (this.searchForm.property_name !== '') {
+        params['property_num'] = this.searchForm.property_name
+      }
       this.$http.get('api/inout_record/query_inout_record', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {
@@ -243,6 +248,7 @@ export default {
         let apiData = resp.data;
         if (apiData.code === 0) {
           this.employeeNum = apiData.data[0].employee_num;
+          console.log(this.employeeNum)
         } else {
           this.$message.error("查询员工编号接口错误");
         }
