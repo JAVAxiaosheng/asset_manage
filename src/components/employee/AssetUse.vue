@@ -161,8 +161,7 @@ export default {
         this.$http.post('api/inout_record/save_inout_record', params).then(resp => {
           let apiData = resp.data;
           if (apiData.code === 0) {
-            this.$message.success("借用成功,请爱惜使用");
-            this.listPropertyInfo();
+            this.modifyProState(row);
           } else {
             this.$message.error("接口错误，借用失败")
           }
@@ -180,6 +179,21 @@ export default {
           this.employeeNum = apiData.data[0].employee_num;
         } else {
           this.$message.error("查询员工编号接口错误");
+        }
+      });
+    },
+    modifyProState(row) {
+      let params = {
+        id: row.id,
+        property_state: 2,
+      };
+      this.$http.put('api/property_info/update_property', params).then((resp) => {
+        let apiData = resp.data;
+        if (apiData.code === 0) {
+          this.$message.success("借用成功,请爱惜使用");
+          this.listPropertyInfo();
+        } else {
+          this.$message.error("修改资产状态接口错误")
         }
       });
     },
