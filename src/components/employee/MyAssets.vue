@@ -117,10 +117,10 @@ export default {
   mounted() {
 
     this.getEmployeeNum();
-    setTimeout(()=>{
+    setTimeout(() => {
       this.listMyRecord();
       this.listPropertyName();
-    },0)
+    }, 0)
   },
   methods: {
     // 格式化日期
@@ -177,7 +177,7 @@ export default {
     },
     modifyProState(id) {
       let params = {
-        id,
+        id: id,
         property_state: 1,
       };
       this.$http.put('api/property_info/update_property', params).then((resp) => {
