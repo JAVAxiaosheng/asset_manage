@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
-import Home from "@/components/Home";
+import Home from "@/components/common/Home";
 import LayoutContainer from '../page/LayoutContainer'
-import Login from "@/components/Login";
-import Register from "@/components/Register"
+import Login from "@/components/common/Login";
+import Register from "@/components/common/Register"
 
 import UserInfo from "@/components/manager/UserInfo";
 import ChangePassword from '@/components/manager/ChangePassword';
@@ -19,7 +19,7 @@ import ChangeMyselfInfo from '@/components/employee/ChangeMyselfInfo';
 
 import AssetInfo from '@/components/manager/AssetInfo';
 
-import AssetUse from "@/components/AssetUse";
+import AssetUse from "@/components/common/AssetUse";
 
 import MyAssets from '@/components/employee/MyAssets'
 

@@ -3,7 +3,7 @@
     <div class="register_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/bilibili_blue.svg" alt="">
+        <img src="../../assets/bilibili_blue.svg" alt="">
       </div>
       <!-- 注册表单区域 -->
       <el-form ref="registerFormRef" :model="registerForm" :rules="registerFormRules" class="register_form">
@@ -134,7 +134,7 @@ export default {
 .register_container {
   height: 100%;
   width: 100%;
-  background: url("../assets/background.jpg") no-repeat center;
+  background: url("../../assets/background.jpg") no-repeat center;
   background-size: 100% 100%;
 }
 
