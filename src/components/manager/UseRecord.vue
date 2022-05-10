@@ -1,5 +1,53 @@
 <template>
   <div>
+
+    <!--    搜索-->
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline"
+             style="background-color: #fdfdfe;margin-bottom: 15px">
+
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="资产名称" style="margin-top: 20px">
+            <el-select v-model="searchForm.property_name" class="m-2" clearable filterable placeholder="请选择"
+                       style="width: 200px" @change="listUseRecord">
+              <el-option
+                  v-for="item in propertyNameOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="借用人" style="margin-top: 20px">
+            <el-select v-model="searchForm.employee_num" class="m-2" clearable filterable placeholder="请选择"
+                       style="width: 200px" @change="listUseRecord">
+              <el-option
+                  v-for="item in employeeNameOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item style="margin-top: 15px;margin-left:10px;">
+            <el-button type="primary" plain round @click="listUseRecord">
+              <el-icon style="vertical-align: middle">
+                <search/>
+              </el-icon>
+              <span style="vertical-align: middle">查询</span>
+            </el-button>
+          </el-form-item>
+        </el-col>
+
+      </el-row>
+
+
+    </el-form>
+
     <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
       <el-table-column prop="record_num" label="记录编号" min-width="120px" align="center">
         <template v-slot="props">
@@ -86,17 +134,27 @@ export default {
   name: "UseRecord",
   data() {
     return {
+      searchForm: {
+        property_name: "",
+        employee_num:''
+      },
+      propertyNameOptions:[],
+      employeeNameOptions:[],
       username: '',
       loading: false,
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+
     };
   },
   mounted() {
+    this.listPropertyName();
+    this.listEmployeeName();
     this.username = Cookies.get('user_name');
     this.listUseRecord();
+    // console.log(this.employeeNameOptions)
   },
   methods: {
     // 格式化日期
@@ -169,9 +227,12 @@ export default {
         page_num: this.pageNum,
         page_size: this.pageSize
       };
-      // if (this.searchForm.property_name !== '') {
-      //   params['property_num'] = this.searchForm.property_name
-      // }
+      if (this.searchForm.property_name !== '') {
+        params['property_num'] = this.searchForm.property_name
+      }
+      if (this.searchForm.employee_num !== '') {
+        params['employee_num'] = this.searchForm.employee_num
+      }
       this.$http.get('api/inout_record/query_inout_record', {params}).then(resp => {
         let apiData = resp.data;
         if (apiData.code === 0) {
@@ -185,6 +246,56 @@ export default {
           this.$message.error("查询记录接口错误")
         }
       });
+    },
+    listPropertyName() {
+      let params = {
+        page_num: this.pageNum,
+        page_size: this.pageSize,
+      };
+      this.$http.get('api/inout_record/query_inout_record', {params}).then(resp => {
+        let apiData = resp.data;
+        let map = new Map();
+        if (apiData.code === 0) {
+          for (let i = 0; i < apiData.data.length; i++) {
+            map.set(apiData.data[i].property_num, apiData.data[i].property_name);
+          }
+
+          for (let [k] of map) {
+            this.propertyNameOptions.push({
+              label: map.get(k),
+              value: k
+            });
+          }
+
+        } else {
+          this.$message.error("查询记录接口错误")
+        }
+      })
+    },
+    listEmployeeName() {
+      let params = {
+        page_num: this.pageNum,
+        page_size: this.pageSize,
+      };
+      this.$http.get('api/inout_record/query_inout_record', {params}).then(resp => {
+        let apiData = resp.data;
+        console.log(apiData)
+        let map = new Map();
+        if (apiData.code === 0) {
+          for (let i = 0; i < apiData.data.length; i++) {
+            map.set(apiData.data[i].employee_num, apiData.data[i].employee_name);
+          }
+
+          for (let [k] of map) {
+            this.employeeNameOptions.push({
+              label: map.get(k),
+              value: k
+            });
+          }
+        } else {
+          this.$message.error("查询记录接口错误")
+        }
+      })
     },
     deleteUseRecord(row) {
       let params = {
