@@ -169,7 +169,6 @@ export default {
           for (let i = 0; i < apiData.data.length; i++) {
             map.set(apiData.data[i].send_person, apiData.data[i].send_person);
           }
-
           for (let [k] of map) {
             this.sendPersonOptions.push({
               label: map.get(k),
