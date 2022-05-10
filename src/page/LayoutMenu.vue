@@ -53,7 +53,7 @@
           <span>资产维修</span>
         </template>
         <el-menu-item index="maintenance_report">维修上报</el-menu-item>
-        <el-menu-item index="2-2">维修记录</el-menu-item>
+        <el-menu-item index="maintenance_record">维修记录</el-menu-item>
       </el-sub-menu>
 
       <el-menu-item index="/employee-change-password">

@@ -84,32 +84,86 @@
         <template v-slot="props">
           <el-tag type="success" v-if="props.row.inout_state === 1">已归还</el-tag>
           <el-tag type="warning" v-if="props.row.inout_state === 2">借用</el-tag>
+          <el-tag type="danger" v-if="props.row.inout_state === 3">维修</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" fixed="right" width="140px">
-        <el-button type="primary" plain>
-          维修上报
-        </el-button>
+        <template v-slot="props">
+          <el-button v-if="props.row.inout_state !== 3" type="primary" plain @click="openReport(props.row)">
+            维修上报
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+        v-model="reportDialogFormVisible"
+        title="维 修 上 报"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        :show-close="false"
+        width="52%">
+      <el-form :model="reportForm" :rules="reportRules" ref="reportFromRef">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="资产编号" style="margin-left: 20px">
+              <el-input v-model.number="reportForm.property_num" style="width: 220px" disabled/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="送修人" style="margin-left: 20px">
+              <el-input v-model="reportForm.send_person" style="width: 220px" disabled/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="报修原因" style="margin-left: 20px" prop="reason">
+              <el-input v-model.number="reportForm.reason" style="width: 545px" :rows="4" type="textarea"/>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button type="warning" plain @click="reportCancel">取 消</el-button>
+        <el-button type="success" @click="report">上 报</el-button>
+      </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import Cookies from 'js-cookie'
 
 export default {
   name: "MaintenanceReport",
   data() {
     return {
       loading: false,
+      recordNum: '',
       searchForm: {
         recordNum: ""
       },
       tableData: [],
       pageNum: 1,
       pageSize: 1,
-      propertyInfo: {}
+      propertyInfo: {},
+      reportDialogFormVisible: false,
+      reportForm: {
+        property_num: '',
+        send_person: '',
+        reason: ''
+      },
+      reportRules: {
+        reason: [
+          {required: true, message: '密码不能为空', trigger: 'change'},
+        ],
+      }
     }
   },
   mounted() {
@@ -123,6 +177,46 @@ export default {
       }
       this.listUseRecord();
     },
+    // 打开上报
+    openReport(row) {
+      console.log(row)
+      this.reportDialogFormVisible = true;
+      this.reportForm.send_person = Cookies.get("user_name");
+      this.reportForm.property_num = row.property_num;
+      this.recordNum = row.record_num;
+    },
+    //上报
+    report() {
+      let params = {
+        record_num: this.recordNum,
+        property_num: this.reportForm.property_num,
+        send_time: parseInt((new Date().getTime() / 1000).toString()),
+        send_person: this.reportForm.send_person.trim(),
+        reason: this.reportForm.reason.trim(),
+        repair_state: 2
+      }
+      this.$refs['reportFromRef'].validate((valid) => {
+        if (valid) {
+          this.$http.post('api/repair_record/save_repair_record', params).then(resp => {
+            let apiData = resp.data;
+            console.log(apiData.code === 0)
+            if (apiData.code === 0) {
+              this.reportDialogFormVisible = false;
+              this.$message.success("上报成功");
+              this.search();
+              this.$refs['reportFromRef'].resetFields();
+            } else {
+              this.$message.error("接口错误,上报失败")
+            }
+          })
+        }
+      })
+    },
+    //取消上报
+    reportCancel() {
+      this.reportDialogFormVisible = false;
+    },
+
     // 格式化日期
     formatDate(time) {
       return moment(time * 1000).format("YYYY-MM-DD HH:mm");

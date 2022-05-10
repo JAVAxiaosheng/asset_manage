@@ -24,7 +24,8 @@ import AssetUse from "@/components/common/AssetUse";
 import MyAssets from '@/components/employee/MyAssets'
 
 import UseRecord from "@/components/manager/UseRecord";
-import MaintenanceReport from '@/components/employee/MaintenanceReport'
+import MaintenanceReport from '@/components/employee/MaintenanceReport';
+import MaintenanceRecord from '@/components/employee/MaintenanceRecord'
 const routerHistory = createWebHistory()
 const router = createRouter({
     history: routerHistory,
@@ -101,6 +102,11 @@ const router = createRouter({
                     path: '/maintenance_report',
                     name: "MaintenanceReport",
                     component: MaintenanceReport
+                },
+                {
+                    path: '/maintenance_record',
+                    name: "MaintenanceRecord",
+                    component: MaintenanceRecord
                 },
                 {
                     path: '/my_assets',

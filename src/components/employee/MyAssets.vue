@@ -67,6 +67,7 @@
         <template v-slot="props">
           <el-tag type="success" v-if="props.row.inout_state === 1">已归还</el-tag>
           <el-tag type="warning" v-if="props.row.inout_state === 2">借用</el-tag>
+          <el-tag type="danger" v-if="props.row.inout_state === 3">维修</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="110">
@@ -191,6 +192,7 @@ export default {
       });
     },
     listMyRecord() {
+      console.log(this.employeeNum)
       this.loading = true;
       let params = {
         page_num: this.pageNum,
