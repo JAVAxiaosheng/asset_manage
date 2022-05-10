@@ -41,9 +41,9 @@
           </el-icon>
           <span>资产管理</span>
         </template>
-        <el-menu-item index="asset_info">资产信息</el-menu-item>
+        <el-menu-item index="/asset_info">资产信息</el-menu-item>
         <el-menu-item index="/asset-use">资产借用</el-menu-item>
-        <el-menu-item index="2-2">借还记录</el-menu-item>
+        <el-menu-item index="/use_record">使用记录</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="3">

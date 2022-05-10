@@ -23,6 +23,8 @@ import AssetUse from "@/components/common/AssetUse";
 
 import MyAssets from '@/components/employee/MyAssets'
 
+import UseRecord from "@/components/manager/UseRecord";
+
 const routerHistory = createWebHistory()
 const router = createRouter({
     history: routerHistory,
@@ -69,6 +71,11 @@ const router = createRouter({
                     path: '/asset_info',
                     name: "AssetInfo",
                     component: AssetInfo
+                },
+                {
+                    path: '/use_record',
+                    name: "UseRecord",
+                    component: UseRecord
                 },
                 {
                     path: '/change_myself_info',
