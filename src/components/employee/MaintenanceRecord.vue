@@ -128,8 +128,7 @@ export default {
   },
   mounted() {
     this.search();
-    this.listPropertyName()
-    this.listSendPerson()
+    this.listData()
   },
   methods: {
     search() {
@@ -157,46 +156,29 @@ export default {
         }
       })
     },
-    listSendPerson() {
+    listData() {
       let params = {
         page_num: 1,
         page_size: 1000,
       };
       this.$http.get('api/repair_record/query_repair_record', {params}).then(resp => {
         let apiData = resp.data;
-        let map = new Map();
+        let map1 = new Map();
+        let map2 = new Map();
         if (apiData.code === 0) {
           for (let i = 0; i < apiData.data.length; i++) {
-            map.set(apiData.data[i].send_person, apiData.data[i].send_person);
+            map1.set(apiData.data[i].send_person, apiData.data[i].send_person);
+            map2.set(apiData.data[i].property_num, apiData.data[i].property_name);
           }
-          for (let [k] of map) {
+          for (let [k] of map1) {
             this.sendPersonOptions.push({
-              label: map.get(k),
+              label: map1.get(k),
               value: k
             });
           }
-
-        } else {
-          this.$message.error("查询记录接口错误")
-        }
-      })
-    },
-    listPropertyName() {
-      let params = {
-        page_num: 1,
-        page_size: 1000,
-      };
-      this.$http.get('api/repair_record/query_repair_record', {params}).then(resp => {
-        let apiData = resp.data;
-        let map = new Map();
-        if (apiData.code === 0) {
-          for (let i = 0; i < apiData.data.length; i++) {
-            map.set(apiData.data[i].property_num, apiData.data[i].property_name);
-          }
-
-          for (let [k] of map) {
+          for (let [k] of map2) {
             this.propertyNameOptions.push({
-              label: map.get(k),
+              label: map2.get(k),
               value: k
             });
           }
@@ -206,7 +188,6 @@ export default {
         }
       })
     },
-
     // 格式化日期
     formatDate(time) {
       return moment(time * 1000).format("YYYY-MM-DD HH:mm");
