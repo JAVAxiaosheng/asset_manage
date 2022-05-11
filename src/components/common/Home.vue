@@ -2,6 +2,8 @@
   <div class="box">
     <div id="main1"></div>
     <div id="main2"></div>
+  </div>
+  <div class="box">
     <div id="main3"></div>
     <div id="main4"></div>
   </div>
@@ -26,16 +28,97 @@ export default {
     this.figure4("main4");
   },
   methods: {
-
-
-    figure3(id){
+    figure1(id) {
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById(id));
+      // 绘制图表
+      myChart.setOption({
+        dataset: {
+          source: [
+            ['score', 'amount', 'product'],
+            [89.3, 58212, 'Matcha Latte'],
+            [57.1, 78254, 'Milk Tea'],
+            [74.4, 41032, 'Cheese Cocoa'],
+            [50.1, 12755, 'Cheese Brownie'],
+            [89.7, 20145, 'Matcha Cocoa'],
+            [68.1, 79146, 'Tea'],
+            [19.6, 91852, 'Orange Juice'],
+            [10.6, 101852, 'Lemon Juice'],
+            [32.7, 20112, 'Walnut Brownie']
+          ]
+        },
+        title: {
+          text: 'Referer of a Website',
+          left: 'center'
+        },
+        grid: {containLabel: true},
+        xAxis: {name: 'amount'},
+        yAxis: {type: 'category'},
+        visualMap: {
+          orient: 'horizontal',
+          left: 'center',
+          min: 10,
+          max: 100,
+          text: ['High Score', 'Low Score'],
+          dimension: 0,
+          inRange: {
+            color: ['#65B581', '#FFCE34', '#FD665F']
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            encode: {
+              x: 'amount',
+              y: 'product'
+            }
+          }
+        ]
+      });
+    },
+    figure2(id) {
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById(id));
+      // 绘制图表
+      myChart.setOption({
+        legend: {
+          top: 'bottom'
+        },
+        title: {
+          text: 'Referer of a Website',
+          left: 'center'
+        },
+        series: [
+          {
+            name: 'Nightingale Chart',
+            type: 'pie',
+            radius: [20, 100],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+              borderRadius: 5
+            },
+            data: [
+              {value: 40, name: 'rose 1'},
+              {value: 38, name: 'rose 2'},
+              {value: 32, name: 'rose 3'},
+              {value: 30, name: 'rose 4'},
+              {value: 28, name: 'rose 5'},
+              {value: 26, name: 'rose 6'},
+              {value: 22, name: 'rose 7'},
+              {value: 18, name: 'rose 8'}
+            ]
+          }
+        ]
+      });
+    },
+    figure3(id) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
       myChart.setOption({
         title: {
           text: 'Referer of a Website',
-          subtext: 'Fake Data',
           left: 'center'
         },
         tooltip: {
@@ -51,11 +134,11 @@ export default {
             type: 'pie',
             radius: '50%',
             data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
+              {value: 1048, name: 'Search Engine'},
+              {value: 735, name: 'Direct'},
+              {value: 580, name: 'Email'},
+              {value: 484, name: 'Union Ads'},
+              {value: 300, name: 'Video Ads'}
             ],
             emphasis: {
               itemStyle: {
@@ -68,7 +151,7 @@ export default {
         ]
       });
     },
-    figure4(id){
+    figure4(id) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -82,7 +165,10 @@ export default {
             }
           }
         },
-
+        title: {
+          text: 'Referer of a Website',
+          left: 'center'
+        },
         legend: {
           data: ['Evaporation', 'Precipitation', 'Temperature']
         },
@@ -119,7 +205,7 @@ export default {
         ],
         series: [
           {
-            name: 'Evaporation',
+            // name: 'Evaporation',
             type: 'bar',
             tooltip: {
               valueFormatter: function (value) {
@@ -131,7 +217,7 @@ export default {
             ]
           },
           {
-            name: 'Precipitation',
+            // name: 'Precipitation',
             type: 'bar',
             tooltip: {
               valueFormatter: function (value) {
@@ -143,7 +229,7 @@ export default {
             ]
           },
           {
-            name: 'Temperature',
+            // name: 'Temperature',
             type: 'line',
             yAxisIndex: 1,
             tooltip: {
@@ -156,104 +242,28 @@ export default {
         ]
       });
     },
-    figure1(id){
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById(id));
-      // 绘制图表
-      myChart.setOption({
-        dataset: {
-          source: [
-            ['score', 'amount', 'product'],
-            [89.3, 58212, 'Matcha Latte'],
-            [57.1, 78254, 'Milk Tea'],
-            [74.4, 41032, 'Cheese Cocoa'],
-            [50.1, 12755, 'Cheese Brownie'],
-            [89.7, 20145, 'Matcha Cocoa'],
-            [68.1, 79146, 'Tea'],
-            [19.6, 91852, 'Orange Juice'],
-            [10.6, 101852, 'Lemon Juice'],
-            [32.7, 20112, 'Walnut Brownie']
-          ]
-        },
-
-        grid: { containLabel: true },
-        xAxis: { name: 'amount' },
-        yAxis: { type: 'category' },
-        visualMap: {
-          orient: 'horizontal',
-          left: 'center',
-          min: 10,
-          max: 100,
-          text: ['High Score', 'Low Score'],
-          // Map the score column to color
-          dimension: 0,
-          inRange: {
-            color: ['#65B581', '#FFCE34', '#FD665F']
-          }
-        },
-        series: [
-          {
-            type: 'bar',
-            encode: {
-              // Map the "amount" column to X axis.
-              x: 'amount',
-              // Map the "product" column to Y axis
-              y: 'product'
-            }
-          }
-        ]
-      });
-    },
-    figure2(id){
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById(id));
-      // 绘制图表
-      myChart.setOption({
-        legend: {
-          top: 'bottom'
-        },
-
-        series: [
-          {
-            name: 'Nightingale Chart',
-            type: 'pie',
-            radius: [20, 100],
-            center: ['50%', '50%'],
-            roseType: 'area',
-            itemStyle: {
-              borderRadius: 5
-            },
-            data: [
-              { value: 40, name: 'rose 1' },
-              { value: 38, name: 'rose 2' },
-              { value: 32, name: 'rose 3' },
-              { value: 30, name: 'rose 4' },
-              { value: 28, name: 'rose 5' },
-              { value: 26, name: 'rose 6' },
-              { value: 22, name: 'rose 7' },
-              { value: 18, name: 'rose 8' }
-            ]
-          }
-        ]
-      });
-    }
   }
 }
 </script>
 
 <style scoped>
-.box{
-  width: 100%;
-  margin: 0 auto;
+.box {
+  width: 1100px;
+  margin-left: 60px;
+  background-color: #fff;
+  text-align: center;
   display: flex;
-  flex-wrap: wrap;
 }
-#main1,#main2,#main3,#main4{
+
+#main1, #main2, #main3, #main4 {
+  position: relative;
   padding: 10px;
   width: 500px;
   height: 350px;
-  border: rgb(233,238,243) solid 3px;
+  border-left: rgb(233, 238, 243) solid 30px;
+  border-bottom: rgb(233, 238, 243) solid 10px;
 }
+
 
 </style>
 
