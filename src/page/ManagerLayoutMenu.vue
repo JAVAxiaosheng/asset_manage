@@ -53,7 +53,6 @@
           </el-icon>
           <span>资产维修</span>
         </template>
-        <el-menu-item index="3-1">维修上报</el-menu-item>
         <el-menu-item index="/repair_record">维修记录</el-menu-item>
       </el-sub-menu>
 
