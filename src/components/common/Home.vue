@@ -18,13 +18,18 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Home',
   data() {
-    return {};
+    return {
+
+    };
   },
 
   mounted() {
+    this.getSingleAssetsRepairRateData();
+    this.getSingleAssetsRateData();
+    this.getCountByUserData();
     this.figure1("main1");
     this.figure2("main2");
-    this.figure3("main3");
+
     this.figure4("main4");
   },
   methods: {
@@ -76,7 +81,7 @@ export default {
         ]
       });
     },
-    figure2(id) {
+    figure2(id,data) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -85,12 +90,16 @@ export default {
           top: 'bottom'
         },
         title: {
-          text: 'Referer of a Website',
+          text: '单个资产维修率',
           left: 'center'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         series: [
           {
-            name: 'Nightingale Chart',
+            name: '维修率',
             type: 'pie',
             radius: [20, 100],
             center: ['50%', '50%'],
@@ -98,31 +107,23 @@ export default {
             itemStyle: {
               borderRadius: 5
             },
-            data: [
-              {value: 40, name: 'rose 1'},
-              {value: 38, name: 'rose 2'},
-              {value: 32, name: 'rose 3'},
-              {value: 30, name: 'rose 4'},
-              {value: 28, name: 'rose 5'},
-              {value: 26, name: 'rose 6'},
-              {value: 22, name: 'rose 7'},
-              {value: 18, name: 'rose 8'}
-            ]
+            data: data
           }
         ]
       });
     },
-    figure3(id) {
+    figure3(id,data) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
       myChart.setOption({
         title: {
-          text: 'Referer of a Website',
+          text: '单个资产使用率',
           left: 'center'
         },
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
           orient: 'vertical',
@@ -130,16 +131,10 @@ export default {
         },
         series: [
           {
-            name: 'Access From',
+            name: '使用率',
             type: 'pie',
-            radius: '50%',
-            data: [
-              {value: 1048, name: 'Search Engine'},
-              {value: 735, name: 'Direct'},
-              {value: 580, name: 'Email'},
-              {value: 484, name: 'Union Ads'},
-              {value: 300, name: 'Video Ads'}
-            ],
+            radius: '65%',
+            data:data,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -151,7 +146,7 @@ export default {
         ]
       });
     },
-    figure4(id) {
+    figure4(id,xAxisData,series) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -165,17 +160,14 @@ export default {
             }
           }
         },
-        title: {
-          text: 'Referer of a Website',
-          left: 'center'
-        },
+
         legend: {
-          data: ['Evaporation', 'Precipitation', 'Temperature']
+          // data: ['员工', '资产使用', '资产使用']
         },
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data:xAxisData,
             axisPointer: {
               type: 'shadow'
             }
@@ -184,65 +176,44 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: 'Precipitation',
-            min: 0,
-            max: 250,
-            interval: 50,
-            axisLabel: {
-              formatter: '{value} ml'
-            }
-          },
-          {
-            type: 'value',
-            name: 'Temperature',
+            name: '资产使用',
             min: 0,
             max: 25,
             interval: 5,
-            axisLabel: {
-              formatter: '{value} °C'
-            }
-          }
+          },
+          {
+            type: 'value',
+            name: '资产使用',
+            min: 0,
+            max: 50,
+            interval: 10,
+          },
         ],
-        series: [
-          {
-            // name: 'Evaporation',
-            type: 'bar',
-            tooltip: {
-              valueFormatter: function (value) {
-                return value + ' ml';
-              }
-            },
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-            ]
-          },
-          {
-            // name: 'Precipitation',
-            type: 'bar',
-            tooltip: {
-              valueFormatter: function (value) {
-                return value + ' ml';
-              }
-            },
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-            ]
-          },
-          {
-            // name: 'Temperature',
-            type: 'line',
-            yAxisIndex: 1,
-            tooltip: {
-              valueFormatter: function (value) {
-                return value + ' °C';
-              }
-            },
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-          }
-        ]
+        series,
       });
     },
+    getSingleAssetsRateData() {
+      this.$http.get('api/inout_record/inout_count').then(resp => {
+       let apiData=resp.data
+        this.figure3("main3",apiData.data);
+      })
+    },
+    getSingleAssetsRepairRateData() {
+      this.$http.get('api/repair_record/repair_count').then(resp => {
+        let apiData=resp.data
+        this.figure2("main2",apiData.data);
+      })
+    },
+    getCountByUserData() {
+      this.$http.get('api/inout_record/count_by_user').then(resp => {
+        let apiData=resp.data;
+        console.log(apiData)
+        this.figure4("main4",apiData.data.employee_names,apiData.data.items);
+      })
+    },
   }
+
+
 }
 </script>
 
