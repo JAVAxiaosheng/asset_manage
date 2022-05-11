@@ -83,6 +83,7 @@
         <template v-slot="props">
           <el-tag type="success" v-if="props.row.inout_state === 1">已归还</el-tag>
           <el-tag type="warning" v-if="props.row.inout_state === 2">借用</el-tag>
+          <el-tag type="danger" v-if="props.row.inout_state === 3">维修</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" fixed="right" width="110px">
@@ -136,10 +137,10 @@ export default {
     return {
       searchForm: {
         property_name: "",
-        employee_num:''
+        employee_num: ''
       },
-      propertyNameOptions:[],
-      employeeNameOptions:[],
+      propertyNameOptions: [],
+      employeeNameOptions: [],
       username: '',
       loading: false,
       pageNum: 1,

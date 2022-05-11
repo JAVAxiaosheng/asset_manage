@@ -3,9 +3,9 @@
     <div style="background-color: #fdfdfe;margin-bottom: 15px">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-row :gutter="20">
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-form-item label="资产名称" style="margin-top: 15px">
-              <el-input v-model="searchForm.property_name" @change="search" style="width: 180px" ></el-input>
+              <el-input v-model="searchForm.property_name" @change="search" style="width: 180px"></el-input>
             </el-form-item>
           </el-col>
 
@@ -47,15 +47,15 @@
         </el-row>
         <el-row :gutter="20">
 
-          <el-col :span="8" >
-            <el-form-item label="入库时间"  >
+          <el-col :span="8">
+            <el-form-item label="入库时间">
               <el-date-picker @change="search" v-model="searchForm.create_time" type="date"
                               placeholder="请选择时间" style="width: 180px"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="资产状态" >
+            <el-form-item label="资产状态">
               <el-select v-model="searchForm.property_state" class="m-2" clearable filterable placeholder="请选择"
                          @change="search" style="width: 180px">
                 <el-option
@@ -92,8 +92,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="property_factory" label="生产厂家" min-width="150px" >
-        <template v-slot="props" >
+      <el-table-column prop="property_factory" label="生产厂家" min-width="150px">
+        <template v-slot="props">
           <el-tag type="warning">{{ props.row.property_factory }}</el-tag>
         </template>
       </el-table-column>
@@ -218,7 +218,7 @@
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;购&nbsp;&nbsp;买&nbsp;&nbsp;人"
                             style="margin-left: 20px;">
-                <el-select v-model="addPropertyForm.buyer" class="m-2"  filterable placeholder="请选择">
+                <el-select v-model="addPropertyForm.buyer" class="m-2" filterable placeholder="请选择">
                   <el-option
                       v-for="item in buyerOptions"
                       :key="item.value"
@@ -274,11 +274,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格" style="margin-left: 20px;position: relative"
-                            prop="property_price" >
+              <el-form-item label="价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格"
+                            style="margin-left: 20px;position: relative"
+                            prop="property_price">
                 <el-input v-model.number="updatePropertyForm.property_price" style="width: 220px">
                   <template #append>
-                    <el-button :icon="Search" >元</el-button>
+                    <el-button :icon="Search">元</el-button>
                   </template>
                 </el-input>
               </el-form-item>
@@ -299,7 +300,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资产状态">
-                <el-select v-model="updatePropertyForm.property_state" class="m-2"  filterable disabled
+                <el-select v-model="updatePropertyForm.property_state" class="m-2" filterable disabled
                            placeholder="请选择">
                   <el-option
                       v-for="item in propertyStateOptions"
@@ -313,7 +314,7 @@
             <el-col :span="12">
               <el-form-item label="&nbsp;&nbsp;购&nbsp;&nbsp;买&nbsp;&nbsp;人"
                             style="margin-left: 20px;">
-                <el-select v-model="updatePropertyForm.buyer" class="m-2"  filterable placeholder="请选择">
+                <el-select v-model="updatePropertyForm.buyer" class="m-2" filterable placeholder="请选择">
                   <el-option
                       v-for="item in buyerOptions"
                       :key="item.value"
@@ -483,7 +484,7 @@ export default {
       } else if (state === 2) {
         return '借出';
       } else {
-        return '维护';
+        return '维修';
       }
     },
 
