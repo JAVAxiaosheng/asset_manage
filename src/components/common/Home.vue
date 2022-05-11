@@ -248,8 +248,8 @@ export default {
 
 <style scoped>
 .box {
-  width: 1100px;
-  margin-left: 60px;
+  width: 1300px;
+  margin-left: -25px;
   background-color: #fff;
   text-align: center;
   display: flex;
@@ -258,7 +258,7 @@ export default {
 #main1, #main2, #main3, #main4 {
   position: relative;
   padding: 10px;
-  width: 500px;
+  width: 700px;
   height: 350px;
   border-left: rgb(233, 238, 243) solid 30px;
   border-bottom: rgb(233, 238, 243) solid 10px;
