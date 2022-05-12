@@ -134,16 +134,16 @@ export default {
 .register_container {
   height: 100%;
   width: 100%;
-  background: url("../../assets/background.jpg") no-repeat center;
+  background: url("../../assets/background2.JPG") no-repeat center;
   background-size: 100% 100%;
 }
 
 .register_box {
   width: 300px;
   height: 350px;
-  background-color: rgba(111, 111, 111, .2);
+  background-color: rgba(111, 111, 111, .6);
   position: absolute;
-  left: 70%;
+  left: 75%;
   top: 50%;
   transform: translate(-50%, -50%);
   //border: 5px rgba(110, 147, 114, 0.3) solid;
@@ -151,7 +151,6 @@ export default {
   .avatar_box {
     height: 80px;
     width: 80px;
-    background-color: transparent;
     border: 1px solid #eee;
     border-radius: 50%;
     box-shadow: 0 0 10px #ddd;

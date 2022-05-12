@@ -65,7 +65,8 @@ export default {
 </script>
 <style scoped>
 .el-header {
-  background-color: #333333;
+  background:rgb(51,51,51,.9);
+  background: linear-gradient(30deg, #4b4141, #444e52, #49483d);
   width: 100%;
   color: #333;
   text-align: center;

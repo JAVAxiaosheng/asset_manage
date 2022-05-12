@@ -1,5 +1,6 @@
 <template>
   <div>
+    <span class="title">资 &nbsp;产 &nbsp;管 &nbsp;理 &nbsp;系 &nbsp;统</span>
     <el-dropdown class="down">
     <span class="el-dropdown-link">
       <span v-if="role==0">
@@ -76,9 +77,14 @@ export default {
   align-items: center;
 }
 
+.title{
+  color: #ffffff;
+  font-size: 24px;
+  font-family: "微软雅黑", Arial, sans-serif;
+  font-weight: bold;
+}
 /deep/ .el-dropdown-link {
   color: #fff;
-
   font-size: 16px;
 }
 

@@ -178,16 +178,17 @@ export default {
             type: 'value',
             name: '资产使用',
             min: 0,
-            max: 25,
-            interval: 5,
+            max: 20,
+            interval: 4,
           },
           {
             type: 'value',
             name: '资产使用',
             min: 0,
-            max: 50,
-            interval: 10,
+            max: 40,
+            interval: 8,
           },
+
         ],
         series,
       });
@@ -207,11 +208,12 @@ export default {
     getCountByUserData() {
       this.$http.get('api/inout_record/count_by_user').then(resp => {
         let apiData=resp.data;
-        // console.log(apiData);
+
         for (let i = 0; i < apiData.data.items.length; i++) {
           apiData.data.items[i]['yAxisIndex']=apiData.data.items[i]['yaxisIndex'];
           delete apiData.data.items[i]['yaxisIndex'];
         }
+        console.log(apiData);
         this.figure4("main4",apiData.data.employee_names,apiData.data.items);
       })
     },
