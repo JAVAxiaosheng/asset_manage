@@ -65,7 +65,7 @@ export default {
 </script>
 <style scoped>
 .el-header {
-  background:rgb(51,51,51,.9);
+  background: rgba(51, 51, 51, .9);
   background: linear-gradient(30deg, #4b4141, #444e52, #49483d);
   width: 100%;
   color: #333;
@@ -82,7 +82,7 @@ export default {
 }
 
 .el-main {
-  background-color: rgb(233,238,243);
+  background-color: rgb(233, 238, 243);
   color: #333;
   text-align: center;
   overflow-y: auto;
