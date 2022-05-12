@@ -30,8 +30,8 @@
           </el-icon>
           <span>员工管理</span>
         </template>
-        <el-menu-item index="/department_info">部门信息</el-menu-item>
-        <el-menu-item index="/manager_employee_info">员工信息</el-menu-item>
+        <el-menu-item index="/manager-employee-info">员工信息</el-menu-item>
+        <el-menu-item index="/department-info">部门信息</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="2">
@@ -41,9 +41,9 @@
           </el-icon>
           <span>资产管理</span>
         </template>
-        <el-menu-item index="/asset_info">资产信息</el-menu-item>
+        <el-menu-item index="/asset-info">资产信息</el-menu-item>
         <el-menu-item index="/asset-use">资产借用</el-menu-item>
-        <el-menu-item index="/use_record">使用记录</el-menu-item>
+        <el-menu-item index="/use-record">使用记录</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="3">
@@ -53,7 +53,7 @@
           </el-icon>
           <span>资产维修</span>
         </template>
-        <el-menu-item index="/repair_record">维修记录</el-menu-item>
+        <el-menu-item index="/repair-record">维修记录</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="4">

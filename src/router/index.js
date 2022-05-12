@@ -56,37 +56,37 @@ const router = createRouter({
                 component: UserInfo
             },
                 {
-                    path: '/department_info',
+                    path: '/department-info',
                     name: "departmentInfo",
                     component: departmentInfo
                 },
                 {
-                    path: '/manager_employee_info',
+                    path: '/manager-employee-info',
                     name: "managerEmployeeInfo",
                     component: managerEmployeeInfo
                 },
                 {
-                    path: '/employee_info',
+                    path: '/employee-info',
                     name: "EmployeeInfo",
                     component: EmployeeInfo
                 },
                 {
-                    path: '/asset_info',
+                    path: '/asset-info',
                     name: "AssetInfo",
                     component: AssetInfo
                 },
                 {
-                    path: '/repair_record',
+                    path: '/repair-record',
                     name: "RepairRecord",
                     component: RepairRecord
                 },
                 {
-                    path: '/use_record',
+                    path: '/use-record',
                     name: "UseRecord",
                     component: UseRecord
                 },
                 {
-                    path: '/change_myself_info',
+                    path: '/change-myself-info',
                     name: "ChangeMyselfInfo",
                     component: ChangeMyselfInfo
                 },
@@ -106,17 +106,17 @@ const router = createRouter({
                     component: AssetUse
                 },
                 {
-                    path: '/maintenance_report',
+                    path: '/maintenance-report',
                     name: "MaintenanceReport",
                     component: MaintenanceReport
                 },
                 {
-                    path: '/maintenance_record',
+                    path: '/maintenance-record',
                     name: "MaintenanceRecord",
                     component: MaintenanceRecord
                 },
                 {
-                    path: '/my_assets',
+                    path: '/my-assets',
                     name: "MyAssets",
                     component: MyAssets
                 },
