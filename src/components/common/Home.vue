@@ -6,12 +6,32 @@
   <div class="box">
     <div id="main3"></div>
     <div id="main4"></div>
+    <el-form class="btn">
+      <el-form-item style="margin-top: 20px;">
+        <el-button type="primary" @click="exportExcel" plain>
+          <el-icon style="vertical-align: middle">
+            <bottom/>
+          </el-icon>
+          <span style="vertical-align: middle">导出</span>
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
+
+  <el-table :data="tableData" border stripe style="width: 100%;" id="outExcel">
+    <el-table-column prop="name" label="资产名称" min-width="100px"/>
+    <el-table-column prop="value" label="使用率" min-width="80px">
+      <template v-slot="props">
+        {{ props.row.value }}%
+      </template>
+    </el-table-column>
+  </el-table>
 
 </template>
 
 <script>
 import * as echarts from 'echarts';
+import outToExcel from "@/excel/outToExcel";
 
 
 export default {
@@ -19,10 +39,9 @@ export default {
   name: 'Home',
   data() {
     return {
-
+      tableData: []
     };
   },
-
   mounted() {
     this.getSingleAssetsRepairRateData();
     this.getSingleAssetsRateData();
@@ -33,6 +52,10 @@ export default {
     this.figure4("main4");
   },
   methods: {
+    exportExcel() {
+      outToExcel.exportExcel("资产使用率.xlsx", "#outExcel")
+      // outToExcel.exportExcel("资产使用率.xlsx", "#outExcel");
+    },
     figure1(id) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
@@ -81,7 +104,7 @@ export default {
         ]
       });
     },
-    figure2(id,data) {
+    figure2(id, data) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -112,7 +135,7 @@ export default {
         ]
       });
     },
-    figure3(id,data) {
+    figure3(id, data) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -134,7 +157,7 @@ export default {
             name: '使用率',
             type: 'pie',
             radius: '65%',
-            data:data,
+            data: data,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -146,7 +169,7 @@ export default {
         ]
       });
     },
-    figure4(id,xAxisData,series) {
+    figure4(id, xAxisData, series) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
@@ -167,7 +190,7 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data:xAxisData,
+            data: xAxisData,
             axisPointer: {
               type: 'shadow'
             }
@@ -195,26 +218,36 @@ export default {
     },
     getSingleAssetsRateData() {
       this.$http.get('api/inout_record/inout_count').then(resp => {
-       let apiData=resp.data
-        this.figure3("main3",apiData.data);
+        let apiData = resp.data;
+        console.log(apiData);
+        this.figure3("main3", apiData.data);
+        var total = 0;
+        for (let i = 0; i < apiData.data.length; i++) {
+          total = total + apiData.data[i].value;
+        }
+        for (let i = 0; i < apiData.data.length; i++) {
+          apiData.data[i].value = (apiData.data[i].value / total * 100).toFixed(2);
+        }
+        this.tableData = apiData.data;
+
       })
     },
     getSingleAssetsRepairRateData() {
       this.$http.get('api/repair_record/repair_count').then(resp => {
-        let apiData=resp.data
-        this.figure2("main2",apiData.data);
+        let apiData = resp.data
+        this.figure2("main2", apiData.data);
       })
     },
     getCountByUserData() {
       this.$http.get('api/inout_record/count_by_user').then(resp => {
-        let apiData=resp.data;
+        let apiData = resp.data;
 
         for (let i = 0; i < apiData.data.items.length; i++) {
-          apiData.data.items[i]['yAxisIndex']=apiData.data.items[i]['yaxisIndex'];
+          apiData.data.items[i]['yAxisIndex'] = apiData.data.items[i]['yaxisIndex'];
           delete apiData.data.items[i]['yaxisIndex'];
         }
-        console.log(apiData);
-        this.figure4("main4",apiData.data.employee_names,apiData.data.items);
+        // console.log(apiData);
+        this.figure4("main4", apiData.data.employee_names, apiData.data.items);
       })
     },
   }
@@ -225,6 +258,7 @@ export default {
 
 <style scoped>
 .box {
+  position: relative;
   width: 1300px;
   margin-left: -25px;
   background-color: #fff;
@@ -233,12 +267,19 @@ export default {
 }
 
 #main1, #main2, #main3, #main4 {
-  position: relative;
+  /*position: relative;*/
   padding: 10px;
   width: 700px;
   height: 350px;
   border-left: rgb(233, 238, 243) solid 30px;
   border-bottom: rgb(233, 238, 243) solid 10px;
+}
+
+.btn {
+  position: absolute;
+  top: -10px;
+  left: 520px;
+  z-index: 10;
 }
 
 

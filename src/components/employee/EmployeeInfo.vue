@@ -28,8 +28,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-          </el-col>
-          <el-col :span="3">
             <el-form-item style="margin-top: 20px;float: right">
               <el-button type="primary" @click="search" round plain>
                 <el-icon style="vertical-align: middle">
@@ -39,11 +37,21 @@
               </el-button>
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-form-item style="margin-top: 20px;float: right">
+              <el-button type="warning" @click="exportExcel" round plain>
+                <el-icon style="vertical-align: middle">
+                  <bottom/>
+                </el-icon>
+                <span style="vertical-align: middle">导出</span>
+              </el-button>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
     <!--    列表展示-->
-    <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%">
+    <el-table :data="tableData" border v-loading="loading" stripe style="width: 100%" id="outExcel">
       <el-table-column prop="employee_num" label="员工编号" min-width="100px" fixed>
         <template v-slot="props">
           <el-tag type="info">{{ props.row.employee_num }}</el-tag>
@@ -108,6 +116,8 @@
 </template>
 
 <script>
+import outToExcel from "@/excel/outToExcel";
+
 export default {
   name: "EmployeeInfo",
   data() {
@@ -129,6 +139,10 @@ export default {
     this.listEmployee();
   },
   methods: {
+    exportExcel() {
+      outToExcel.exportExcel("员工信息表.xlsx", "#outExcel");
+    },
+
     // 获取部门编号和部门名称的选项
     listDepartmentOptions() {
       let params = {
