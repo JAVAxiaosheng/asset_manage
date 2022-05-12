@@ -97,7 +97,7 @@ export default {
           left: 'center'
         },
         grid: {containLabel: true},
-        xAxis: {name: 'amount'},
+        xAxis: {name: '次'},
         yAxis: {type: 'category'},
         visualMap: {
           orient: 'horizontal',
