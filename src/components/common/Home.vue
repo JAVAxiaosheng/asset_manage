@@ -130,7 +130,7 @@ export default {
           top: 'bottom'
         },
         title: {
-          text: '单个资产维修率',
+          text: '资产维修率',
           left: 'center'
         },
         tooltip: {
@@ -158,7 +158,7 @@ export default {
       // 绘制图表
       myChart.setOption({
         title: {
-          text: '单个资产使用率',
+          text: '资产使用率',
           left: 'center'
         },
         tooltip: {
@@ -200,6 +200,10 @@ export default {
               color: '#999'
             }
           }
+        },
+        title: {
+          text: '资产使用次数（员工）',
+          left: 'center'
         },
 
         legend: {
