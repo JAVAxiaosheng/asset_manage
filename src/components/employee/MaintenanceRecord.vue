@@ -198,8 +198,8 @@ export default {
       this.search();
     },
     handleCurrentChange(val) {
-      this.search = val;
-      this.listMyRecord();
+      this.pageNum = val;
+      this.search();
     },
   }
 }
