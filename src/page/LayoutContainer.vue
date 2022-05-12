@@ -1,19 +1,21 @@
 <template>
-  <el-dialog
-      v-model="dialogVisible"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :modal="true"
-      title="登录提醒"
-      width="30%">
-    <span style="color: red">您还没有登录，请您先登录！</span>
-    <template #footer>
+  <div class="dialog">
+    <el-dialog
+        v-model="dialogVisible"
+        :show-close="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        :modal="true"
+        title="登录提醒"
+        width="30%">
+      <span style="color: red">您还没有登录，请您先登录！</span>
+      <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="confirmClick">确定</el-button>
       </span>
-    </template>
-  </el-dialog>
+      </template>
+    </el-dialog>
+  </div>
   <el-container>
     <el-aside width="200px">
       <layout-menu v-if="roleId === 0"/>
@@ -64,7 +66,12 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
+
+.dialog /deep/ .el-overlay-dialog {
+  background-color: rgb(157, 157, 166);
+}
+
 .el-header {
   background: rgba(51, 51, 51, .9);
   background: linear-gradient(30deg, #4b4141, #444e52, #49483d);
@@ -92,4 +99,5 @@ export default {
 body > .el-container {
   margin-bottom: 40px;
 }
+
 </style>
