@@ -102,7 +102,7 @@ export default {
 .login_box {
   width: 300px;
   height: 350px;
-  background-color: rgba(111, 111, 111, .2);
+  background-color: rgba(111, 111, 111, .4);
   position: absolute;
   left: 70%;
   top: 50%;
