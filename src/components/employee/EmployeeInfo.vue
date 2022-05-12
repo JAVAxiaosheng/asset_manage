@@ -37,16 +37,16 @@
               </el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
-            <el-form-item style="margin-top: 20px;float: right">
-              <el-button type="warning" @click="exportExcel" round plain>
-                <el-icon style="vertical-align: middle">
-                  <bottom/>
-                </el-icon>
-                <span style="vertical-align: middle">导出</span>
-              </el-button>
-            </el-form-item>
-          </el-col>
+          <!--          <el-col :span="3">
+                      <el-form-item style="margin-top: 20px;float: right">
+                        <el-button type="warning" @click="exportExcel" round plain>
+                          <el-icon style="vertical-align: middle">
+                            <bottom/>
+                          </el-icon>
+                          <span style="vertical-align: middle">导出</span>
+                        </el-button>
+                      </el-form-item>
+                    </el-col>-->
         </el-row>
       </el-form>
     </div>
