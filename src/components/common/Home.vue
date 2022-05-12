@@ -8,11 +8,11 @@
     <div id="main4"></div>
     <el-form>
       <el-form-item style="margin-top: 20px;" class="btn">
-        <el-button type="primary" @click="exportExcel" plain>
+        <el-button type="primary" @click="exportExcel" size="small" plain>
           <el-icon style="vertical-align: middle">
             <bottom/>
           </el-icon>
-          <span style="vertical-align: middle">导出</span>
+          <span style="vertical-align: middle">导出报表</span>
         </el-button>
       </el-form-item>
       <el-form-item style="margin-top: 20px;margin-left: -50px" class="select">
@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       tableData: [],
-      dateValue: '',
+      dateValue: moment(new Date().getTime()).format("YYYY-MM-DD"),
       dateOptions: [],
     };
   },
@@ -224,14 +224,14 @@ export default {
             type: 'value',
             name: '资产使用',
             min: 0,
-            max: 10,
+            max: 8,
             interval: 2,
           },
           {
             type: 'value',
             name: '资产使用',
             min: 0,
-            max: 5,
+            max: 6,
             interval: 1,
           },
 

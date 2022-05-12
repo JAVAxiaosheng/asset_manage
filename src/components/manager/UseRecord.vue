@@ -275,8 +275,8 @@ export default {
     },
     listEmployeeName() {
       let params = {
-        page_num: this.pageNum,
-        page_size: this.pageSize,
+        page_num: 1,
+        page_size: 1000,
       };
       this.$http.get('api/inout_record/query_inout_record', {params}).then(resp => {
         let apiData = resp.data;
