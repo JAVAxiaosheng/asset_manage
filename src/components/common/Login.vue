@@ -95,7 +95,7 @@ export default {
 .login_container {
   height: 100%;
   width: 100%;
-  background: url("../../assets/background.jpg") no-repeat center;
+  background: url("../../assets/background1.JPG") no-repeat center;
   background-size: 100% 100%;
 }
 
