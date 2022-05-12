@@ -92,15 +92,4 @@ export default {
 body > .el-container {
   margin-bottom: 40px;
 }
-
-.allblur {
-  -webkit-filter: blur(2px);
-  -moz-filter: blur(2px);
-  -ms-filter: blur(2px);
-  filter: blur(2px);
-  zoom: 1;
-}
-   .v-modal {
-     background-color: rgba(0,0,0,0.9) !important;
-   }
 </style>

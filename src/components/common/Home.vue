@@ -191,6 +191,7 @@ export default {
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
       myChart.setOption({
+
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -202,6 +203,7 @@ export default {
         },
 
         legend: {
+          top: 'bottom'
           // data: ['员工', '资产使用', '资产使用']
         },
         xAxis: [
