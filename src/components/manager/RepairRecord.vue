@@ -275,9 +275,11 @@ export default {
       return moment(time * 1000).format("YYYY-MM-DD HH:mm");
     },
     handleSizeChange(val) {
+      this.search();
       this.pageSize = val;
     },
     handleCurrentChange(val) {
+      this.search();
       this.pageNum = val;
     },
   }

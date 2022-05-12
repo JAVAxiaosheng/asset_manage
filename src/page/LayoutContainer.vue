@@ -4,6 +4,7 @@
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :modal="true"
       title="登录提醒"
       width="30%">
     <span style="color: red">您还没有登录，请您先登录！</span>
@@ -91,4 +92,15 @@ export default {
 body > .el-container {
   margin-bottom: 40px;
 }
+
+.allblur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+  zoom: 1;
+}
+   .v-modal {
+     background-color: rgba(0,0,0,0.9) !important;
+   }
 </style>
