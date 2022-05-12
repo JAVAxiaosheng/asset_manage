@@ -207,7 +207,11 @@ export default {
     getCountByUserData() {
       this.$http.get('api/inout_record/count_by_user').then(resp => {
         let apiData=resp.data;
-        console.log(apiData)
+        // console.log(apiData);
+        for (let i = 0; i < apiData.data.items.length; i++) {
+          apiData.data.items[i]['yAxisIndex']=apiData.data.items[i]['yaxisIndex'];
+          delete apiData.data.items[i]['yaxisIndex'];
+        }
         this.figure4("main4",apiData.data.employee_names,apiData.data.items);
       })
     },
