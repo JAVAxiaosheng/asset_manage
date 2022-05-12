@@ -6,8 +6,8 @@
   <div class="box">
     <div id="main3"></div>
     <div id="main4"></div>
-    <el-form class="btn">
-      <el-form-item style="margin-top: 20px;">
+    <el-form>
+      <el-form-item style="margin-top: 20px;" class="btn">
         <el-button type="primary" @click="exportExcel" plain>
           <el-icon style="vertical-align: middle">
             <bottom/>
@@ -15,10 +15,21 @@
           <span style="vertical-align: middle">导出</span>
         </el-button>
       </el-form-item>
+      <el-form-item style="margin-top: 20px;margin-left: -50px" class="select">
+        <el-select v-model="dateValue" class="m-2" clearable filterable placeholder="请选择"
+                   @change="getCountByDate" style="width: 150px">
+          <el-option
+              v-for="item in dateOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
     </el-form>
   </div>
 
-  <el-table :data="tableData" border stripe style="width: 100%;" id="outExcel">
+  <el-table :data="tableData" border stripe style="width: 100%;display: none" id="outExcel">
     <el-table-column prop="name" label="资产名称" min-width="100px"/>
     <el-table-column prop="value" label="使用率" min-width="80px">
       <template v-slot="props">
@@ -32,51 +43,57 @@
 <script>
 import * as echarts from 'echarts';
 import outToExcel from "@/excel/outToExcel";
-
+import moment from "moment";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Home',
   data() {
     return {
-      tableData: []
+      tableData: [],
+      dateValue: '',
+      dateOptions: [],
     };
   },
   mounted() {
+    this.getDateOptions();
+    this.getCountByDate();
     this.getSingleAssetsRepairRateData();
     this.getSingleAssetsRateData();
     this.getCountByUserData();
-    this.figure1("main1");
-    this.figure2("main2");
 
-    this.figure4("main4");
   },
   methods: {
+    getDateOptions() {
+      let nowDate = moment(new Date().getTime()).format("YYYY-MM-DD");
+      let yesterdayDate = moment(new Date().getTime() - (24 * 60 * 60 * 1000)).format("YYYY-MM-DD");
+      let lastDate = moment(new Date().getTime() - (24 * 60 * 60 * 1000 * 2)).format("YYYY-MM-DD");
+      this.dateOptions.push({
+        label: nowDate,
+        value: nowDate
+      }, {
+        label: yesterdayDate,
+        value: yesterdayDate
+      }, {
+        label: lastDate,
+        value: lastDate
+      });
+    },
     exportExcel() {
       outToExcel.exportExcel("资产使用率.xlsx", "#outExcel")
       // outToExcel.exportExcel("资产使用率.xlsx", "#outExcel");
     },
-    figure1(id) {
+    figure1(id, data) {
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(id));
       // 绘制图表
       myChart.setOption({
         dataset: {
-          source: [
-            ['score', 'amount', 'product'],
-            [89.3, 58212, 'Matcha Latte'],
-            [57.1, 78254, 'Milk Tea'],
-            [74.4, 41032, 'Cheese Cocoa'],
-            [50.1, 12755, 'Cheese Brownie'],
-            [89.7, 20145, 'Matcha Cocoa'],
-            [68.1, 79146, 'Tea'],
-            [19.6, 91852, 'Orange Juice'],
-            [10.6, 101852, 'Lemon Juice'],
-            [32.7, 20112, 'Walnut Brownie']
-          ]
+          source: data
+
         },
         title: {
-          text: 'Referer of a Website',
+          text: '资产使用次数（天）',
           left: 'center'
         },
         grid: {containLabel: true},
@@ -216,6 +233,18 @@ export default {
         series,
       });
     },
+    getCountByDate() {
+      let params = {};
+      if (this.dateValue !== '') {
+        params['out_time'] = this.dateValue;
+      }
+      this.$http.get('api/inout_record/count_by_date', {params}).then(resp => {
+        let apiData = resp.data;
+        console.log(apiData.data);
+        this.figure1("main1", apiData.data)
+      })
+    }
+    ,
     getSingleAssetsRateData() {
       this.$http.get('api/inout_record/inout_count').then(resp => {
         let apiData = resp.data;
@@ -250,6 +279,7 @@ export default {
         this.figure4("main4", apiData.data.employee_names, apiData.data.items);
       })
     },
+
   }
 
 
@@ -280,6 +310,12 @@ export default {
   top: -10px;
   left: 520px;
   z-index: 10;
+}
+
+.select {
+  position: absolute;
+  top: -390px;
+  left: 520px;
 }
 
 
