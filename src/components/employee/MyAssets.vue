@@ -118,10 +118,10 @@ export default {
   mounted() {
 
     this.getEmployeeNum();
-    setTimeout(() => {
-      this.listMyRecord();
-      this.listPropertyName();
-    }, 0)
+    // setTimeout(() => {
+    //   this.listMyRecord();
+    //   this.listPropertyName();
+    // }, 0)
   },
   methods: {
     // 格式化日期
@@ -251,6 +251,8 @@ export default {
         if (apiData.code === 0) {
           this.employeeNum = apiData.data[0].employee_num;
           console.log(this.employeeNum)
+          this.listMyRecord();
+          this.listPropertyName();
         } else {
           this.$message.error("查询员工编号接口错误");
         }
